@@ -1,4 +1,12 @@
 body { font-family: sans-serif; font-weight: bold; width: 600px; }
 
-.file-list { list-style-type: none; }
-.file-list li { height: 64px; background-color: #eee; margin: 3px; }
+.cmd-button { display: block; margin: 5px; padding: 5px; background-color: #eee; float: left; width: 130px; }
+.cmd-button img { height: 60px; float: left; }
+.cmd-button:visited, .cmd-button:link { color: #003366; text-decoration: none; }
+
+.file-list { list-style-type: none; padding: 0px; margin: 0px; }
+.file-list li { height: 50px; background-color: #eee; margin: 5px 3px; padding: 5px; }
+.file-list li img { float: left; }
+.file-list li span { float: left; padding: 5px; } 
+
+.clear { clear: both; }

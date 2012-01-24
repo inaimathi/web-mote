@@ -38,7 +38,7 @@
 		  (:li (:img :src (cond ((directory? e) "/icons/folder.png")
 					((video? e) "/icons/video.png")
 					((audio? e) "/icons/audio.png")))
-		       (str (file-namestring (pathname-as-file e)))))))))
+		       (:span (str (file-namestring (pathname-as-file e))))))))))
 
 (defun dir-list (directory)
   (let* ((raw-list (list-directory directory))
@@ -64,7 +64,9 @@
 (define-easy-handler (control-panel :uri "/") (dir)
   (page-template (:title "Web Mote - Control Panel")
     (loop for c in *ui-bar*
-	  do (htm (:a :href (format nil "/command?cmd-name=~a" c) (str c))))
+	  do (htm (:a :class "cmd-button" :href (format nil "/command?cmd-name=~a" c) 
+		      (:img :src (format nil "/icons/~(~a~)-normal.png" c)))))
+    (:br :class "clear")
     (dir-list (or dir *starting-directory*))))
 
 (define-easy-handler (handle-command :uri "/command") (cmd-name file-name)
