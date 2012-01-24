@@ -13,10 +13,10 @@
 
 (defmethod run-cmd ((cmd string) &optional arg)
   (declare (ignore arg))
-  (shell-command (format nil "echo \"~a\" > ~a" cmd *cmd-in*)))
+  (shell-command (format nil "echo \"~a\" >> ~a" cmd *cmd-in*)))
 
 (defmethod run-cmd ((cmd function) &optional arg)
-  (shell-command (format nil "echo \"~a\" > ~a" (funcall cmd arg) *cmd-in*)))
+  (shell-command (format nil "echo \"~a\" >> ~a" (funcall cmd arg) *cmd-in*)))
 
 (defun prev-dir (dir) (make-pathname :directory (pathname-directory (pathname-as-file dir))))
 
