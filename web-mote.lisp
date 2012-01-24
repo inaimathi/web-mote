@@ -3,22 +3,22 @@
 (in-package #:web-mote)
 
 (defparameter *commands*
-  (list :pause "pause"
+  (list :rewind "seek -40"
+	:pause "pause"
 	:forward "seek +40"
-	:rewind "seek -40"
 	:stop "stop"
-	:osd "osd"
 	:play (lambda (f) (format nil "loadfile '~a'" f))))
+
+(defparameter *ui-bar* (list :rewind :pause :forward :stop))
 
 (defmethod run-cmd ((cmd string) &optional arg)
   (declare (ignore arg))
-   (format nil "echo \"~a\" > ~~/.mplayer/in" cmd))
+  (shell-command (format nil "echo \"~a\" > ~a" cmd *cmd-in*)))
 
 (defmethod run-cmd ((cmd function) &optional arg)
-   (format nil "echo \"~a\" > ~~/.mplayer/in" (funcall cmd arg)))
+  (shell-command (format nil "echo \"~a\" > ~a" (funcall cmd arg) *cmd-in*)))
 
-(defun prev-dir (dir)
-  (make-pathname :directory (pathname-directory (pathname-as-file dir))))
+(defun prev-dir (dir) (make-pathname :directory (pathname-directory (pathname-as-file dir))))
 
 (defun to-string (obj) (format nil "~a" obj))
 
@@ -33,7 +33,7 @@
 	      (:a :href (cond ((directory? e) 
 			       (format nil "/?dir=~a" e))
 			      ((or (audio? e) (video? e)) 
-			       (format nil "/command?cmd-name=play&file-name=~a" e))
+			       (format nil "/command?cmd-name=PLAY&file-name=~a" e))
 			      (t "#"))
 		  (:li (:img :src (cond ((directory? e) "/icons/folder.png")
 					((video? e) "/icons/video.png")
@@ -45,9 +45,9 @@
 	 (dirs (remove-if-not #'directory-exists-p raw-list))
 	 (files (remove-if #'directory-exists-p raw-list)))
     (with-html-output (*standard-output* nil :indent t)
-      (:ul (when (not (string= directory *starting-directory*)) 
+      (:ul (when (not (string= (to-string directory) (to-string *starting-directory*))) 
 	     (htm (:a :href (format nil "/?dir=~a" (prev-dir directory)) 
-		      (:li (:img (:src "/icons/folder.png")) ".."))))
+		      (:li (:img :src "/icons/folder.png") ".."))))
 	   (entry-list dirs)
 	   (entry-list files)))))
 
@@ -61,8 +61,9 @@
 
 (define-easy-handler (control-panel :uri "/") (dir)
   (page-template (:title "Web Mote - Control Panel")
+    (loop for c in *ui-bar*
+	  do (htm (:a :href (format nil "/command?cmd-name=~a" c) (str c))))
     (dir-list (or dir *starting-directory*))))
 
 (define-easy-handler (handle-command :uri "/command") (cmd-name file-name)
-  (format nil "command: ~a || file: ~a" cmd-name file-name))
-
+  (format nil "command: ~a" (run-cmd (getf *commands* (intern cmd-name :keyword)) file-name)))
