@@ -13,10 +13,10 @@
 
 (defmethod run-cmd ((cmd string) &optional arg)
   (declare (ignore arg))
-  (shell-command (format nil "echo \"~a\" >> ~a" cmd *cmd-in*)))
+  (format nil "echo \"~a\" > ~a" cmd *cmd-in*))
 
 (defmethod run-cmd ((cmd function) &optional arg)
-  (shell-command (format nil "echo \"~a\" >> ~a" (funcall cmd arg) *cmd-in*)))
+  (format nil "echo \"~a\" > ~a" (funcall cmd arg) *cmd-in*))
 
 (defun prev-dir (dir) (make-pathname :directory (pathname-directory (pathname-as-file dir))))
 
@@ -38,14 +38,15 @@
 		  (:li (:img :src (cond ((directory? e) "/icons/folder.png")
 					((video? e) "/icons/video.png")
 					((audio? e) "/icons/audio.png")))
-		       (str e)))))))
+		       (str (file-namestring (pathname-as-file e)))))))))
 
 (defun dir-list (directory)
   (let* ((raw-list (list-directory directory))
 	 (dirs (remove-if-not #'directory-exists-p raw-list))
 	 (files (remove-if #'directory-exists-p raw-list)))
     (with-html-output (*standard-output* nil :indent t)
-      (:ul (when (not (string= (to-string directory) (to-string *starting-directory*))) 
+      (:ul :class "file-list"
+	   (when (not (string= (to-string directory) (to-string *starting-directory*))) 
 	     (htm (:a :href (format nil "/?dir=~a" (prev-dir directory)) 
 		      (:li (:img :src "/icons/folder.png") ".."))))
 	   (entry-list dirs)
@@ -56,6 +57,7 @@
   `(with-html-output-to-string (*standard-output* nil :prologue t :indent t)
      (:html :xmlns "http://www.w3.org/1999/xhtml" :xml\:lang "en" :lang "en"
 	    (:head (:meta :http-equiv "Content-Type" :content "text/html;charset=utf-8")
+		   (:link :href "/web-mote.css" :rel "stylesheet" :type "text/css" :media "screen")
 		   (:title ,title))
 	    (:body ,@body))))
 
@@ -66,4 +68,5 @@
     (dir-list (or dir *starting-directory*))))
 
 (define-easy-handler (handle-command :uri "/command") (cmd-name file-name)
-  (format nil "command: ~a" (run-cmd (getf *commands* (intern cmd-name :keyword)) file-name)))
+  (format nil "command: ~a" (run-cmd (getf *commands* (intern cmd-name :keyword)) file-name))
+  (redirect "/"))

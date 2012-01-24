@@ -1,0 +1,4 @@
+body { font-family: sans-serif; font-weight: bold; width: 600px; }
+
+.file-list { list-style-type: none; }
+.file-list li { height: 64px; background-color: #eee; margin: 3px; }

@@ -25,4 +25,6 @@
   (shell-command (format nil "tail -f ~a | mplayer -slave -idle -fs -vc ffh264vdpau,ffmpeg12vdpau,ffvc1vdpau,ffwmv3vdpau, -ao alsa:device=hw=0.3 -display :0.0 |  cat > ~a" *cmd-in* *cmd-out*)))
 
 (defvar *web-server* (start (make-instance 'hunchentoot:easy-acceptor :port *server-port*)))
+(push (create-folder-dispatcher-and-handler "/icons/" "icons/") *dispatch-table*)
+(push (create-static-file-dispatcher-and-handler "/web-mote.css" "web-mote.css") *dispatch-table*)
 ;; (serve-mplayer)
