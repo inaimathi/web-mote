@@ -1,12 +1,11 @@
-body { font-family: sans-serif; font-weight: bold; width: 600px; }
+body { font-family: sans-serif; font-weight: bold; width: 900px; }
 
-.cmd-button { display: block; margin: 5px; padding: 5px; background-color: #eee; float: left; width: 130px; }
-.cmd-button img { height: 60px; float: left; }
-.cmd-button:visited, .cmd-button:link { color: #003366; text-decoration: none; }
+.cmd-button { display: block; margin: 5px; padding: 5px; background-color: #eee; float: left; width: 205px; }
+.cmd-button img { height: 120px; float: left; }
 
 .file-list { list-style-type: none; padding: 0px; margin: 0px; }
-.file-list li { height: 50px; background-color: #eee; margin: 5px 3px; padding: 5px; }
-.file-list li img { float: left; }
-.file-list li span { float: left; padding: 5px; } 
+.file-list li { height: 150px; background-color: #eee; margin: 5px 3px; padding: 5px; }
+.file-list li img { float: left; height: 120px; }
+.file-list li span { float: right; padding: 5px; font-size: xx-large; width: 750px; } 
 
 .clear { clear: both; }
