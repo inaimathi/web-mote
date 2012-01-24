@@ -1,7 +1,7 @@
 ;;;; package.lisp
 
 (defpackage #:web-mote
-  (:use #:cl #:hunchentoot #:cl-who #:cl-fad #:cl-ppcre)
+  (:use #:cl #:hunchentoot #:cl-who #:cl-fad #:cl-ppcre #:bordeaux-threads)
   (:import-from :trivial-shell :shell-command))
 
 (in-package :web-mote)
@@ -22,7 +22,7 @@
 	 (shell-command (format nil "chmod 777 ~a" *cmd-in*))))
 
 (defun serve-mplayer ()
-  (shell-command (format nil "tail -f ~a | mplayer -slave -idle -fs -vc ffh264vdpau,ffmpeg12vdpau,ffvc1vdpau,ffwmv3vdpau, -ao alsa:device=hw=0.3 -display :0.0 |  cat > ~a" *cmd-in* *cmd-out*)))
+  (shell-command (format nil "tail -f ~a | mplayer -slave -idle -fs -display :0.0" *cmd-in*)))
 
 (defvar *web-server* (start (make-instance 'hunchentoot:easy-acceptor :port *server-port*)))
 (push (create-folder-dispatcher-and-handler "/icons/" "icons/") *dispatch-table*)

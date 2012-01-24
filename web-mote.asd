@@ -6,7 +6,8 @@
                #:cl-who
                #:hunchentoot
                #:cl-ppcre
-               #:trivial-shell)
+               #:trivial-shell
+	       #:bordeaux-threads)
   :components ((:file "package")
                (:file "web-mote")))
 
