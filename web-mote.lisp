@@ -23,8 +23,9 @@
 (defun to-string (obj) (format nil "~a" obj))
 
 (defun directory? (file) (directory-exists-p file))
-(defun video? (file) (scan "(mp4|flv|avi|ogv)$" (to-string file)))
+(defun video? (file) (scan "(mpg|mpeg|m4v|mov|wmv|mp4|flv|avi|ogv)$" (to-string file)))
 (defun audio? (file) (scan "(mp3|ogg|wav)$" (to-string file)))
+(defun image? (file) (scan "(png|gif|jpg|jpeg|tiff)$"))
 
 (defun entry-list (entries)
   (with-html-output (*standard-output* nil :indent t)

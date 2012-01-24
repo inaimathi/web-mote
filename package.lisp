@@ -6,12 +6,13 @@
 
 (in-package :web-mote)
 
+;;;;;;;;;;;;;;; config variables ;;;;;;;;;;;;;;;
 (defparameter *starting-directory* (make-pathname :directory '(:absolute "home" "inaimathi" "Videos")))
-
-(defvar *web-server* (start (make-instance 'hunchentoot:easy-acceptor :port 4141)))
-
 (defparameter *server-port* 4141)
 (defparameter *target-directory* (make-pathname :directory '(:absolute "home" "inaimathi" ".mplayer")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
 (defparameter *cmd-in* (merge-pathnames *target-directory* "in"))
 (defparameter *cmd-out* (merge-pathnames *target-directory* "out"))
 
