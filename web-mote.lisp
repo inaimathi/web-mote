@@ -19,10 +19,10 @@
 
 (defmethod run-cmd ((cmd string) &optional arg)
   (declare (ignore arg))
-  (with-open-file (stream *cmd-in* :direction :output :if-exists supersede) cmd))
+  (shell-command (format nil "echo \"~a\" > ~a" cmd *cmd-in*)))
 
 (defmethod run-cmd ((cmd function) &optional arg)
-  (with-open-file (stream *cmd-in* :direction :output :if-exists supersede) (funcall cmd arg)))
+  (shell-command (format nil "echo \"~a\" > ~a" (funcall cmd arg) *cmd-in*)))
 
 (defpsmacro ajax-command (cmd &optional file-name)
   `(chain $ (ajax (create :url "/command"
