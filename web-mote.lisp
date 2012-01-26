@@ -19,17 +19,14 @@
 
 (defmethod run-cmd ((cmd string) &optional arg)
   (declare (ignore arg))
-  (shell-command (format nil "echo \"~a\" > ~a" cmd *cmd-in*)))
+  (with-open-file (stream *cmd-in* :direction :output :if-exists :supersede) cmd))
 
 (defmethod run-cmd ((cmd function) &optional arg)
-  (shell-command (format nil "echo \"~a\" > ~a" (funcall cmd arg) *cmd-in*)))
+  (with-open-file (stream *cmd-in* :direction :output :if-exists :supersede) (funcall cmd arg)))
 
-(defpsmacro ajax-command (cmd &optional file-name)
-  `(chain $ (ajax (create :url "/command"
-			  :data (create :cmd-name ,cmd ,@(when file-name (list :file-name file-name)))
-			  :context (@ document body)
-			  :type "POST"
-			  :error (lambda (a b error) (alert error))))))
+(defun ajax-command (cmd &optional file-name) 
+  (format nil "$.post(\"/command\", {\"cmd-name\": \"~a\"~@[, \"file-name\": \"~a\"~]})"
+	  cmd file-name))
 
 (defun prev-dir (dir) (make-pathname :directory (pathname-directory (pathname-as-file dir))))
 
@@ -52,7 +49,7 @@
 (defun single-entry (entry)
   (with-html-output (*standard-output* nil :indent t)
     (:a :href (if (directory? entry) (format nil "/?dir=~a" entry) "javascript:void(0);")
-	:onclick (when (or (video? entry) (audio? entry)) (ps* `(ajax-command :play ,(to-string entry))))
+	:onclick (when (or (video? entry) (audio? entry)) (ajax-command :play (to-string entry)))
 	(:li (:img :src (entry-icon entry) (:span (str (file-namestring (pathname-as-file entry)))))))))
 
 (defun entry-icon (entry)
@@ -86,7 +83,7 @@
   (page-template (:title "Web Mote - Control Panel")
     (loop for c in *ui-bar*
 	  do (htm (:a :class "cmd-button" :href "javascript:void(0);"
-		      :onclick (ps* `(ajax-command ,c))
+		      :onclick (ajax-command c)
 		      (:img :src (format nil "/icons/~(~a~)-normal.png" c)))))
     (:br :class "clear")
     (dir-list (or dir *starting-directory*))))
