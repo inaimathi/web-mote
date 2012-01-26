@@ -4,6 +4,7 @@
   :serial t
   :depends-on (#:cl-fad
                #:cl-who
+	       #:parenscript
                #:hunchentoot
                #:cl-ppcre
                #:trivial-shell
