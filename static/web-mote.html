@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <title>WebMote</title>
+  </head>
+  <body>
+
+    <!-- --------- -->
+    <!-- Templates -->
+    <!-- --------- -->
+    <script id="tmp-folder" type="text/x-handlebars-template">
+      <li class="{{type}}">
+	{{#if buttons}}
+	<button class="play icon play" onclick="mote.play('{{path}}')"></button>
+	<button class="shuffle icon shuffle" onclick="mote.shuffleDir('{{path}}')"></button>
+	{{/if}}
+	<a class="dir-link" href="#navigate{{path}}">{{name}}</a>
+      </li>
+    </script>
+
+    <script id="tmp-file" type="text/x-handlebars-template">
+      <li class="{{type}}">
+	<a class="file-link" href="javascript:void(0);" onclick="mote.play('{{path}}')">{{name}}</a>
+      </li>
+    </script>
+
+    <script id="tmp-control" type="text/x-handlebars-template">
+      <li>
+	<button class="icon {{cmd}}{{#if css-class}} {{css-class}}{{/if}}" onclick="mote.command('{{cmd}}');">
+	</button>
+      </li>
+    </script>
+
+    <script id="tmp-control-block" type="text/x-handlebars-template">
+      <ul>
+	{{#each this}}
+	{{#control-button this}}{{/control-button}}
+	{{/each}}
+      </ul>
+    </script>
+    
+    <!-- ---- -->
+    <!-- Body -->
+    <!-- ---- -->
+    <ul id="file-list"></ul>
+    <div id="controls"></div>
+    
+    <!-- ------ -->
+    <!-- Styles -->
+    <!-- ------ -->
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/custom-theme/jquery-ui-1.8.13.custom.css" type="text/css" media="screen" />
+    
+    <!-- ------- -->
+    <!-- Scripts -->
+    <!-- ------- -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.13.custom.min.js"></script>
+    <script type="text/javascript" src="js/handlebars-1.0.rc.1.js"></script>
+    <script type="text/javascript" src="js/underscore-min.js"></script>
+    <script type="text/javascript" src="js/backbone-min.js"></script>
+
+    <script type="text/javascript" src="js/web-mote.js"></script>
+
+  </body>
+</html>
