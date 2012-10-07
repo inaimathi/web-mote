@@ -1,6 +1,18 @@
 import os, json
 import conf
 
+def isExt(filename, extList):
+    name, ext = os.path.splitext(filename)
+    if ext[1:] in extList:
+        return True
+    return False
+
+def isMusic(filename):
+    return isExt(filename, conf.ext['music'])
+
+def isVideo(filename):
+    return isExt(filename, conf.ext['video'])
+
 def entryToJSON(entry):
     name, ext = os.path.splitext(entry)
     if ext == '':
@@ -11,16 +23,14 @@ def entryToJSON(entry):
     return {'path': entry, 'type': ext, 'name': finalName, 'buttons': True}
 
 def entriesToDicts(entries):
-    dirs = []
-    videos = []
-    music = []
+    dirs, videos, music = [[],[],[]]
     for f in entries:
         res = entryToJSON(f)
         if os.path.isdir(res['path']):
             dirs.append(res)
-        elif res['type'] in ['mp4', 'ogv', 'mov', 'wmf']:
+        elif res['type'] in conf.ext['video']:
             videos.append(res)
-        elif res['type'] in ['mp3', 'ogg', 'wav']:
+        elif res['type'] in conf.ext['music']:
             music.append(res)
     return dirs + videos + music
 

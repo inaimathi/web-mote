@@ -13,13 +13,14 @@ app = web.application(urls, globals())
 player = False
 
 class showDirectory:
-    def GET(self):
+    def POST(self):
         if web.input() == {}:
-            return util.entriesToJSON(conf.root)
+            res = util.entriesToJSON(conf.root)
         elif web.input()['dir'] == "root":
-            return util.entriesToJSON(conf.root)
+            res = util.entriesToJSON(conf.root)
         else:
-            return util.dirToJSON(web.input()['dir'])
+            res = util.dirToJSON(web.input()['dir'])
+        return res
 
 class shuffleDirectory:
     def POST(self):
@@ -28,10 +29,14 @@ class shuffleDirectory:
 class play:
     def POST(self):
         global player
-        player = Popen(
-            ["mplayer", "/home/inaimathi/videos/friendship-is-magic/1s01e--pilot-mare-in-the-moon.mp4"],
-            stdin=PIPE, stdout=PIPE, stderr=PIPE)
-        web.debug(web.input())
+        try:
+            f = web.input()['file']
+            if os.path.exists(f):
+                if player:
+                    player.terminate()
+                player = Popen(["mplayer", f], stdin=PIPE)
+        except:
+            web.debug(web.input())
 
 class command:
     def POST(self):
