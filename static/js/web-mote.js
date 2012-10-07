@@ -5,12 +5,19 @@ var util = {
 	    url: url,
 	    data: dat,
 	    type: type,
-	    success: function (data) { res = $.parseJSON(data); },
+	    success: function (data, ret, jq) { 
+		// some browsers error if you try to use the data value here, 
+		// so we use jq.responseText. It provides the same contents, 
+		// but doesn't error
+		res = $.parseJSON(jq.responseText); 
+	    },
 	    async: false
 	});
 	return res;
     },
-    getJSON : function (url, dat) { return util.requestJSON(url, dat, "GET"); },
+    getJSON : function (url, dat) { 
+	return util.requestJSON(url, dat, "GET"); 
+    },
     postJSON : function (url, dat) { return util.requestJSON(url, dat, "POST"); }
 };
 
@@ -64,7 +71,7 @@ var mote = {
     },
     navigate: function (dir) {
 	console.log(["cmd", "display", dir]);
-	mote.render(util.getJSON("/show-directory", {"dir": dir}));
+	mote.render(util.postJSON("/show-directory", {"dir": dir}));
     }
 }
 
@@ -86,13 +93,28 @@ var Routes = Backbone.Router.extend({
     nav: mote.navigate
 });
 
+// older versions of safari don't like `position: fixed`.
+// they also don't like when you set `position: fixed` in a stylesheet,
+//   then override that with inline styles.
+// what I'm saying is that older versions of safari are assholes
+if ($.browser.safari) {
+    $("#controls").css({ "position": 'absolute' });
+    window.onscroll = function() {
+	$("#controls").css({ 
+	    "position": 'absolute',
+	    "top" : window.pageYOffset + 'px'
+	});
+    };
+} else {
+    $("#controls").css({ "position": 'fixed' });    
+}
 
 $(document).ready(function() {
     mote.renderControls(
 	[[{cmd: "rewind-big"}, {cmd: "rewind"}, {cmd: "ff"}, {cmd: "ff-big"}],
 	 [{cmd: "volume-down"}, {cmd: "mute"}, {cmd: "volume-up"}],
 	 [{cmd: "stop", "css-class": "big"}, {cmd: "pause", "css-class": "big"}]]);
-    mote.render(util.getJSON("/show-directory"));
+    mote.render(util.postJSON("/show-directory"));
 
     new Routes();
     Backbone.history.start();
