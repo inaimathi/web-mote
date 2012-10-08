@@ -24,7 +24,7 @@ class showDirectory:
 
 class shuffleDirectory:
     def POST(self):
-        web.debug(web.input())
+        web.debug(["SHUFFLING", web.input()])
 
 class play:
     def POST(self):
@@ -33,8 +33,10 @@ class play:
             f = web.input()['file']
             if os.path.exists(f):
                 if player:
-                    player.terminate()
-                player = Popen(["mplayer", f], stdin=PIPE)
+                    player[1].terminate()
+                ## mplayer suicides if its stdout and stderr are ignored for a while,
+                ## so we're only grabbing stdin here
+                player = ("mplayer", Popen(["mplayer", f], stdin=PIPE))
         except:
             web.debug(web.input())
 
@@ -43,7 +45,8 @@ class command:
         global player
         cmd = web.input()['command']
         if player:
-            player.stdin.write(conf.commands['mplayer'][cmd])
+            (playerType, proc) = player
+            proc.stdin.write(conf.commands[playerType][cmd])
             if cmd == 'stop':
                 player = False
 
