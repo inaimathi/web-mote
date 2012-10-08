@@ -10,7 +10,6 @@ urls = (
     '.*', 'index'
 )
 app = web.application(urls, globals())
-player = False
 
 class showDirectory:
     def POST(self):
@@ -28,27 +27,28 @@ class shuffleDirectory:
 
 class play:
     def POST(self):
-        global player
         try:
-            f = web.input()['file']
-            if os.path.exists(f):
-                if player:
-                    player[1].terminate()
-                ## mplayer suicides if its stdout and stderr are ignored for a while,
-                ## so we're only grabbing stdin here
-                player = ("mplayer", Popen(["mplayer", f], stdin=PIPE))
+            playFile(web.input()['file'])
         except:
             web.debug(web.input())
 
+def playFile(aFile):
+    if os.path.exists(aFile):
+        if conf.currentPlayer:
+            conf.currentPlayer[1].terminate()
+        t = util.typeOfFile(aFile)
+    ## mplayer suicides if its stdout and stderr are ignored for a while,
+    ## so we're only grabbing stdin here
+        conf.currentPlayer = (conf.player[t][0], Popen(conf.player[t] + [aFile], stdin=PIPE))
+
 class command:
     def POST(self):
-        global player
         cmd = web.input()['command']
-        if player:
-            (playerType, proc) = player
-            proc.stdin.write(conf.commands[playerType][cmd])
+        if conf.currentPlayer:
+            (playerName, proc) = conf.currentPlayer
+            proc.stdin.write(conf.commands[playerName][cmd])
             if cmd == 'stop':
-                player = False
+                conf.currentPlayer = False
 
 class index:
     def GET(self):

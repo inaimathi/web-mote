@@ -1,4 +1,4 @@
-import os, json
+import os, json, re
 import conf
 
 def isExt(filename, extList):
@@ -7,11 +7,22 @@ def isExt(filename, extList):
         return True
     return False
 
-def isMusic(filename):
-    return isExt(filename, conf.ext['music'])
+def isAudio(filename):
+    return isExt(filename, conf.ext['audio'])
 
 def isVideo(filename):
     return isExt(filename, conf.ext['video'])
+
+def typeOfFile(path):
+    if isAudio(path):
+        return 'audio'
+    elif isVideo(path):
+        return 'video'
+    else:
+        raise LookupError("can't decide filetype of '%s'" % [path])
+
+def nameToTitle(filename):
+    return re.sub(" [ ]+", " - ", re.sub("-", " ", os.path.basename(filename).title()))
 
 def entryToJSON(entry):
     name, ext = os.path.splitext(entry)
@@ -19,8 +30,7 @@ def entryToJSON(entry):
         ext = "directory"
     else:
         ext = ext[1:]
-    finalName = os.path.basename(name).title()
-    return {'path': entry, 'type': ext, 'name': finalName, 'buttons': True}
+    return {'path': entry, 'type': ext, 'name': nameToTitle(name), 'buttons': True}
 
 def entriesToDicts(entries):
     dirs, videos, music = [[],[],[]]
@@ -30,7 +40,7 @@ def entriesToDicts(entries):
             dirs.append(res)
         elif res['type'] in conf.ext['video']:
             videos.append(res)
-        elif res['type'] in conf.ext['music']:
+        elif res['type'] in conf.ext['audio']:
             music.append(res)
     return dirs + videos + music
 

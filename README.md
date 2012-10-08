@@ -2,6 +2,12 @@
 
 This is a currently Python, web-based interface for MPlayer I put together because I felt like controlling my RasPi-based media center with an iPod touch that serves no other purpose.
 
+The latest re-write of the system was done for the purposes of exploring some UI construction techniques. Writeups available in
+
+[Part 1](http://langnostic.blogspot.ca/2012/10/webmote-right-way.html) and [Part 2](http://langnostic.blogspot.ca/2012/10/webmote-right-way-part-2-or-controlling.html)
+
+#### Usage
+
 1. install Python 2.7 (if you're on Debian, you already have it)
 2. run `python web-mote.py` (if you want it running in the background, use `screen`)
 3. navigate to `http://[machine ip]:8080` to use the remote menu
