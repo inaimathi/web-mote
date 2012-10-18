@@ -19,7 +19,9 @@ Like I said, it's meant to be used through my iPod touch, so the stylesheet is s
 
 This program is released under the GNU AGPL (check the `LICENSE` file for details).
 
-The media player icon artwork is taken from the [famfamfam SILK Icon set](http://www.famfamfam.com/lab/icons/silk/), which are released under [CC-BY 2.5](http://creativecommons.org/licenses/by/2.5/)
+The front-end uses [Twitter Bootstrap](https://github.com/twitter/bootstrap) for styling and icons, which is released under the [Apache License](https://github.com/twitter/bootstrap/blob/master/LICENSE)
+
+A previous version used artwork from the [famfamfam SILK Icon set](http://www.famfamfam.com/lab/icons/silk/), which are released under [CC-BY 2.5](http://creativecommons.org/licenses/by/2.5/)
 
 A previous version used artwork from [lucamennoia's media player icons piece](http://lucamennoia.deviantart.com/art/CustomMediaPlayer-icon-buttons-174712679) (released under [CC-NC-SA](http://creativecommons.org/licenses/by-nc-sa/3.0/), so I didn't even need to attribute them, but I'm cool that way).
 
