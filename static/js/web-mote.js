@@ -35,37 +35,34 @@ var mote = {
 		   })
 		}
     },
-    renderButton: function (control) {
-	
-    },
     renderControls: function (controlLists) {
 	$.each(controlLists,
 	       function (index, e) {
 		   $("#controls").append(templates.controlBlock(e));
 	       })
 	    },
-    play: function (file) {
-	console.log(["cmd", "play", file]);
+    play: function (target) {
+	console.log(["cmd", "play", target]);
 	$.post("/play",
-	       {"file" : file},
+	       {"target" : target},
 	       function (data, textStatus) { 
-		   console.log(["now playing", file, textStatus]);
+		   console.log(["now playing", target, textStatus]);
 	       });
     },
-    shuffleDir: function (dir) {
-	console.log(["SHUFFLE", dir]);
-	$.post("/shuffle-directory", {"dir": dir});
+    shuffle: function (target) {
+	console.log(["SHUFFLE", target]);
+	$.post("/shuffle", {"target": target});
     },
     command: function (cmd) {
 	console.log(cmd);
 	$.post("/command", {"command": cmd},
 	       function () {
 		   if (cmd == "pause") {
-		       var btn = templates.control({cmd: "play", "css-class": "big"});
-		       $("#controls button.pause").replaceWith(btn);
+		       var btn = templates.control({cmd: "play", icoClass: "play"});
+		       $("#controls .pause").replaceWith(btn);
 		   } else if (cmd == "play") {
-		       var btn = templates.control({cmd: "pause", "css-class": "big"});
-		       $("#controls button.play").replaceWith(btn);
+		       var btn = templates.control({cmd: "pause", icoClass: "pause"});
+		       $("#controls .play").replaceWith(btn);
 		   }
 	       })
     },
@@ -101,7 +98,6 @@ if ($.browser.safari) {
     $("#controls").css({ "position": 'absolute' });
     window.onscroll = function() {
 	$("#controls").css({ 
-	    "position": 'absolute',
 	    "top" : window.pageYOffset + 'px'
 	});
     };
@@ -111,9 +107,15 @@ if ($.browser.safari) {
 
 $(document).ready(function() {
     mote.renderControls(
-	[[{cmd: "rewind-big"}, {cmd: "rewind"}, {cmd: "ff"}, {cmd: "ff-big"}],
-	 [{cmd: "volume-down"}, {cmd: "mute"}, {cmd: "volume-up"}],
-	 [{cmd: "stop", "css-class": "big"}, {cmd: "pause", "css-class": "big"}]]);
+	[[{cmd: "rewind-big", icoClass: "fast-backward"}, 
+	  {cmd: "rewind", icoClass: "backward"}, 
+	  {cmd: "ff", icoClass: "forward"}, 
+	  {cmd: "ff-big", icoClass: "fast-forward"}],
+	 [{cmd: "volume-down", icoClass: "volume-down"}, 
+	  {cmd: "mute", icoClass: "volume-off"}, 
+	  {cmd: "volume-up", icoClass: "volume-up"}],
+	 [{cmd: "stop", icoClass: "stop"}, 
+	  {cmd: "pause", icoClass: "pause"}]]);
     mote.render(util.postJSON("/show-directory"));
 
     new Routes();

@@ -2,6 +2,7 @@
 <html lang="en-US">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" />
     <title>WebMote</title>
   </head>
   <body>
@@ -12,10 +13,10 @@
     <script id="tmp-folder" type="text/x-handlebars-template">
       <li class="{{type}}">
 	{{#if buttons}}
-	<button class="play icon play" onclick="mote.play('{{path}}')"></button>
-	<button class="shuffle icon shuffle" onclick="mote.shuffleDir('{{path}}')"></button>
+	<button class="play btn" onclick="mote.play('{{path}}')"><i class="icon-play"></i></button>
+	<!-- <button class="shuffle btn" onclick="mote.shuffle('{{path}}')"></button> -->
 	{{/if}}
-	<a class="dir-link" href="#navigate{{path}}">{{name}}</a>
+	<a class="dir-link{{#unless buttons}} buttonless{{/unless}}" href="#navigate{{path}}">{{name}}</a>
       </li>
     </script>
 
@@ -26,8 +27,9 @@
     </script>
 
     <script id="tmp-control" type="text/x-handlebars-template">
-      <li>
-	<button class="icon {{cmd}}{{#if css-class}} {{css-class}}{{/if}}" onclick="mote.command('{{cmd}}');">
+      <li class="{{icoClass}}">
+	<button onclick="mote.command('{{cmd}}');">
+	  <i class="icon-{{icoClass}}"></i>
 	</button>
       </li>
     </script>
@@ -49,8 +51,10 @@
     <!-- ------ -->
     <!-- Styles -->
     <!-- ------ -->
-    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
     <link rel="stylesheet" href="css/custom-theme/jquery-ui-1.8.13.custom.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/bootstrap-responsive.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
     
     <!-- ------- -->
     <!-- Scripts -->

@@ -1,45 +1,19 @@
+body { width: 400px; margin-top: 160px; }
+
 /** The Control Panel *******************************************/
 #controls { text-align: center; width: 400px; top: 0px; padding: 5px 0px; background-color: rgba(255, 255, 255, 0.8); }
 #controls ul { list-style-type: none; margin: 0px; margin-bottom: 3px; }
 #controls li { display: inline; }
+#controls button { padding: 10px 40px 10px 10px; }
 
 /** The Main File List ******************************************/
 #file-list { list-style-type: none; width: 350px; margin: auto; }
 #file-list li { margin-bottom: 10px; padding: 3px; clear: both; }
-#file-list li button { margin-top: 0px; float: left; }
-#file-list li a { min-height: 20px; padding: 4px; float: left; border: 1px solid #ddd; border-radius: 5px; background: right no-repeat; background-size: 50px; }
-#file-list li a.dir-link { white-space: nowrap; width: 228px; }
-#file-list li a.file-link { word-break: break-all; width: 320px; }
+#file-list li button { margin-top: 0px; float: left; margin-right: 5px; }
+#file-list li a { min-height: 20px; padding: 4px; float: left; border: 1px solid #ddd; border-radius: 5px; background: right no-repeat; background-size: 50px; font-weight: bolder; }
+#file-list li a.dir-link { white-space: nowrap; width: 270px; }
+#file-list li a.file-link, #file-list li a.dir-link.buttonless { word-break: break-all; width: 320px; }
 
 #file-list li.directory a { background-image: url(watermark/folder.png); }
 #file-list li.mp4 a, #file-list li.mov a, #file-list li.ogv a { background-image: url(watermark/video.png); }
 #file-list li.mp3 a, #file-list li.ogg a { background-image: url(watermark/audio.png); }
-
-/** BASICS ******************************************************/
-h1, h2, h3, h4, h5, h6 { margin: 0px; padding: 0px; }
-
-html { width: 400px; }
-body { width: 400px; margin-top: 160px; }
-
-.pointer { cursor: pointer; }
-.hidden { display: none; }
-.clear { clear: both; }
-
-/** BUTTONS, MOTHERFUCKER, DO YOU USE THEM?! ********************/
-button { background: no-repeat 3px 3px; margin: 3px;  height: 28px; width: 40px; background-color: #ddd; border-radius: 8px; cursor: pointer; text-align: left; }
-button.icon { text-indent: 15px; }
-button.big { width: 90px; }
-
-/***** specific button types ************************************/
-button.volume-up { background-image: url(icons/sound.png); }
-button.volume-down { background-image: url(icons/sound_low.png); }
-button.mute { background-image: url(icons/sound_mute.png); }
-
-button.rewind-big { background-image: url(icons/resultset_previous.png); }
-button.rewind { background-image: url(icons/control_rewind_blue.png); }
-button.stop { background-image: url(icons/control_stop_blue.png); }
-button.pause { background-image: url(icons/control_pause_blue.png); }
-button.play { background-image: url(icons/control_play_blue.png); }
-button.ff { background-image: url(icons/control_fastforward_blue.png); }
-button.ff-big { background-image: url(icons/resultset_next.png); }
-button.shuffle { background-image: url(icons/arrow_switch.png); }
