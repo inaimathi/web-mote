@@ -28,7 +28,7 @@
 
     <script id="tmp-control" type="text/x-handlebars-template">
       <li class="{{icoClass}}">
-	<button onclick="mote.command('{{cmd}}');"
+	<button class="btn" onclick="mote.command('{{cmd}}');"
 		{{#if held}}
 		onmousedown="pressed=setInterval(function () {mote.command('{{cmd}}')}, 200)"
 		onmouseup="clearInterval(pressed)" onmouseleave="clearInterval(pressed)"
