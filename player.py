@@ -24,13 +24,13 @@ def getPlayerCommand(filename):
 
 commandTable = {
     'mplayer':
-        {'rewind-big': "\x1B[B", 'rewind': "\x1B[D", 'ff': "\x1B[C", 'ff-big': "\x1B[A",
+        {'step-backward': "\x1B[B", 'backward': "\x1B[D", 'forward': "\x1B[C", 'step-forward': "\x1B[A",
          ## down | left | right | up
-         'volume-down': "9", 'mute': "m", 'volume-up': "0",
+         'volume-down': "9", 'volume-off': "m", 'volume-up': "0",
          'stop': "q", 'pause': " ", 'play': " "},
     'omxplayer':
-        {'rewind-big': "\x1B[B", 'rewind': "\x1B[D", 'ff': "\x1B[C", 'ff-big': "\x1B[A",
-         'mute': " ", #oxmplayer doesn't have a mute, so we pause instead
+        {'step-backward': "\x1B[B", 'backward': "\x1B[D", 'forward': "\x1B[C", 'step-forward': "\x1B[A",
+         'volume-off': " ", #oxmplayer doesn't have a mute, so we pause instead
          'volume-down': "+", 'volume-up': "-", 
          'stop': "q", 'pause': " ", 'play': " "}
     }

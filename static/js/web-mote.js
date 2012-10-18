@@ -45,8 +45,8 @@ var mote = {
 	console.log(["cmd", "play", target]);
 	$.post("/play",
 	       {"target" : target},
-	       function (data, textStatus) { 
-		   console.log(["now playing", target, textStatus]);
+	       function (data, textStatus, jq) { 
+		   console.log(["now playing", target, textStatus, $.parseJSON(jq.responseText)]);
 	       });
     },
     shuffle: function (target) {
@@ -107,15 +107,15 @@ if ($.browser.safari) {
 
 $(document).ready(function() {
     mote.renderControls(
-	[[{cmd: "rewind-big", icoClass: "step-backward"}, 
-	  {cmd: "rewind", icoClass: "backward", held: true}, 
-	  {cmd: "ff", icoClass: "forward", held: true}, 
-	  {cmd: "ff-big", icoClass: "step-forward"}],
-	 [{cmd: "volume-down", icoClass: "volume-down", held: true}, 
-	  {cmd: "mute", icoClass: "volume-off"}, 
-	  {cmd: "volume-up", icoClass: "volume-up", held: true}],
-	 [{cmd: "stop", icoClass: "stop"}, 
-	  {cmd: "pause", icoClass: "pause"}]]);
+	[[{cmd: "step-backward"}, 
+	  {cmd: "backward", held: true}, 
+	  {cmd: "forward", held: true}, 
+	  {cmd: "step-forward"}],
+	 [{cmd: "volume-down", held: true}, 
+	  {cmd: "volume-off"}, 
+	  {cmd: "volume-up", held: true}],
+	 [{cmd: "stop"}, 
+	  {cmd: "pause"}]]);
     mote.render(util.postJSON("/show-directory"));
 
     new Routes();
