@@ -30,8 +30,7 @@
       <li class="{{cmd}}">
 	<button class="btn" onclick="mote.command('{{cmd}}');"
 		{{#if held}}
-		onmousedown="pressed=setInterval(function () {mote.command('{{cmd}}')}, 200)"
-		onmouseup="clearInterval(pressed)" onmouseleave="clearInterval(pressed)"
+		onmousedown="mote.hold('{{cmd}}');" onmouseup="mote.release();" onmouseout="mote.release();"
 		{{/if}}>
 	  <i class="icon-{{cmd}}"></i>
 	</button>

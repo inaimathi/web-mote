@@ -37,7 +37,6 @@ commandTable = {
 
 def play(fileList):
     global commandQueue, activePlayer, commandTable
-    web.debug(fileList)
     if activePlayer:
         commandQueue.put("stop")
     for aFile in fileList:
@@ -46,6 +45,7 @@ def play(fileList):
             cmdTable = commandTable[playerCmd[0]]
             if not playFile(playerCmd, aFile, cmdTable):
                 return "Done"
+    return "Done"
 
 def playFile(playerCmd, fileName, cmdTable):
     global activePlayer, commandQueue

@@ -1,10 +1,9 @@
-body { width: 400px; margin-top: 160px; }
+body { width: 400px; margin-top: 230px; }
 
 /** The Control Panel *******************************************/
 #controls { text-align: center; width: 400px; top: 0px; padding: 5px 0px; background-color: rgba(255, 255, 255, 0.8); }
 #controls ul { list-style-type: none; margin: 0px; margin-bottom: 3px; }
 #controls li { display: inline; }
-#controls button { padding: 7px 30px 7px 7px; }
 
 /** The Main File List ******************************************/
 #file-list { list-style-type: none; width: 350px; margin: auto; }

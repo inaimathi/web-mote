@@ -23,15 +23,15 @@ class play:
     def POST(self):
         t = web.input()['target']
         if os.path.isfile(t):
-            fileQueue = [t]
+            fileList = [t]
         elif os.path.isdir(t):
-            fileQueue = util.deepListDir(t)
+            fileList = util.deepListDir(t)
         else:
-            fileQueue = json.loads(t)
+            fileList = json.loads(t)
         if web.input().get('shuffle', False):
-            random.shuffle(fileQueue)
-        player.play(fileQueue)
-        return util.entriesToJSON(fileQueue)
+            random.shuffle(fileList)
+        player.play(fileList)
+        return util.entriesToJSON(fileList)
 
 class command:
     def POST(self):

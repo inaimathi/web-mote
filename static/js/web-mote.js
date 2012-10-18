@@ -22,6 +22,17 @@ var util = {
 };
 
 var mote = {
+    pressed: false,
+    hold: function (cmd) {
+	mote.release();
+	mote.pressed = setInterval(function(){
+	    mote.command(cmd);
+	}, 200);
+    },
+    release: function () {
+	clearInterval(mote.pressed);
+	mote.pressed = false;
+    },
     targetId: "#file-list",
     render: function (fileList) {
 	if (fileList) {
@@ -45,7 +56,8 @@ var mote = {
 	console.log(["cmd", "play", target]);
 	$.post("/play",
 	       {"target" : target},
-	       function (data, textStatus, jq) { 
+	       function (data, textStatus, jq) {
+		   console.log("SUCCESS!")
 		   console.log(["now playing", target, textStatus, $.parseJSON(jq.responseText)]);
 	       });
     },
