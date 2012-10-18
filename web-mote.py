@@ -1,54 +1,45 @@
-from subprocess import Popen, PIPE
 import web, os, json
-import util, conf
+import util, conf, player 
 
 urls = (
     '/show-directory', 'showDirectory',
-    '/shuffle-directory', 'shuffleDirectory',
+    '/shuffle', 'shuffle',
     '/play', 'play',
     '/command', 'command',
     '.*', 'index'
 )
-app = web.application(urls, globals())
 
+app = web.application(urls, globals())
+        
 class showDirectory:
     def POST(self):
-        if web.input() == {}:
-            res = util.entriesToJSON(conf.root)
-        elif web.input()['dir'] == "root":
-            res = util.entriesToJSON(conf.root)
-        else:
-            res = util.dirToJSON(web.input()['dir'])
-        return res
+        i = web.input()
+        if i == {} or i['dir'] == "root":
+            return util.entriesToJSON(conf.root)
+        else: 
+            assert util.isInRoot(i['dir'])
+            return util.dirToJSON(i['dir'])
 
-class shuffleDirectory:
+class shuffle:
     def POST(self):
-        web.debug(["SHUFFLING", web.input()])
+        web.debug(["ERRY DAY I'M SHUFFLIN", web.input()])
 
 class play:
     def POST(self):
-        try:
-            playFile(web.input()['file'])
-        except:
-            web.debug(web.input())
-
-def playFile(aFile):
-    if os.path.exists(aFile):
-        if conf.currentPlayer:
-            conf.currentPlayer[1].terminate()
-        t = util.typeOfFile(aFile)
-    ## mplayer suicides if its stdout and stderr are ignored for a while,
-    ## so we're only grabbing stdin here
-        conf.currentPlayer = (conf.player[t][0], Popen(conf.player[t] + [aFile], stdin=PIPE))
+        t = web.input()['target']
+        if os.path.isfile(t):
+            web.debug(["PLAYING A SINGLE FILE", t])
+            player.play([t])
+        elif os.path.isdir(t):
+            web.debug(["PLAYING A DIRECTORY", t])
+        else:
+            files = json.loads(t)
+            web.debug(["DEALING WITH A FILE LIST", files])
 
 class command:
     def POST(self):
-        cmd = web.input()['command']
-        if conf.currentPlayer:
-            (playerName, proc) = conf.currentPlayer
-            proc.stdin.write(conf.commands[playerName][cmd])
-            if cmd == 'stop':
-                conf.currentPlayer = False
+        assert player.activePlayer and web.input()['command']
+        player.commandQueue.put(web.input()['command'])
 
 class index:
     def GET(self):
@@ -56,4 +47,3 @@ class index:
 
 if __name__ == "__main__":
     app.run()
-
