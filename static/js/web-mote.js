@@ -107,13 +107,13 @@ if ($.browser.safari) {
 
 $(document).ready(function() {
     mote.renderControls(
-	[[{cmd: "rewind-big", icoClass: "fast-backward"}, 
-	  {cmd: "rewind", icoClass: "backward"}, 
-	  {cmd: "ff", icoClass: "forward"}, 
-	  {cmd: "ff-big", icoClass: "fast-forward"}],
-	 [{cmd: "volume-down", icoClass: "volume-down"}, 
+	[[{cmd: "rewind-big", icoClass: "step-backward"}, 
+	  {cmd: "rewind", icoClass: "backward", held: true}, 
+	  {cmd: "ff", icoClass: "forward", held: true}, 
+	  {cmd: "ff-big", icoClass: "step-forward"}],
+	 [{cmd: "volume-down", icoClass: "volume-down", held: true}, 
 	  {cmd: "mute", icoClass: "volume-off"}, 
-	  {cmd: "volume-up", icoClass: "volume-up"}],
+	  {cmd: "volume-up", icoClass: "volume-up", held: true}],
 	 [{cmd: "stop", icoClass: "stop"}, 
 	  {cmd: "pause", icoClass: "pause"}]]);
     mote.render(util.postJSON("/show-directory"));
