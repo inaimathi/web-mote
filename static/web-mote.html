@@ -14,7 +14,7 @@
       <li class="{{type}}">
 	{{#if buttons}}
 	<button class="play btn" onclick="mote.play('{{path}}')"><i class="icon-play"></i></button>
-	<!-- <button class="shuffle btn" onclick="mote.shuffle('{{path}}')"></button> -->
+	<button class="shuffle btn" onclick="mote.shuffle('{{path}}')"><i class="icon-random"></i></button>
 	{{/if}}
 	<a class="dir-link{{#unless buttons}} buttonless{{/unless}}" href="#navigate{{path}}">{{name}}</a>
       </li>

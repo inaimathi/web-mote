@@ -10,7 +10,7 @@ body { width: 400px; margin-top: 230px; }
 #file-list li { margin-bottom: 10px; padding: 3px; clear: both; }
 #file-list li button { margin-top: 0px; float: left; margin-right: 5px; }
 #file-list li a { min-height: 20px; padding: 4px; float: left; border: 1px solid #ddd; border-radius: 5px; background: right no-repeat; background-size: 50px; font-weight: bolder; }
-#file-list li a.dir-link { white-space: nowrap; width: 270px; }
+#file-list li a.dir-link { white-space: nowrap; width: 220px; }
 #file-list li a.file-link, #file-list li a.dir-link.buttonless { word-break: break-all; width: 320px; }
 
 #file-list li.directory a { background-image: url(watermark/folder.png); }

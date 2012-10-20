@@ -62,8 +62,13 @@ var mote = {
 	       });
     },
     shuffle: function (target) {
-	console.log(["SHUFFLE", target]);
-	$.post("/shuffle", {"target": target});
+	console.log(["cmd", "shuffle", target]);
+	$.post("/play",
+	       {"target" : target, "shuffle": true},
+	       function (data, textStatus, jq) {
+		   console.log("SUCCESS!")
+		   console.log(["now playing", target, textStatus, $.parseJSON(jq.responseText)]);
+	       });
     },
     command: function (cmd) {
 	console.log(cmd);
