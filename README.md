@@ -12,7 +12,7 @@ The latest re-write of the system was done for the purposes of exploring some UI
 2. run `python web-mote.py`
 3. navigate to `http://[machine ip]:8080` to use the remote menu
 
-You can select a port other than `8080` by passing an argument to your script (for example, `python web-mote.py 4343` would start it on port `4343`). You can run it in the background using GNU Screen. Assuming you have it installed, you start a background server with `screen -d -m -S web-mote python web-mote.py`, attach to it using `screen -r web-mote` and detach with `Ctrl+D`.
+You can select a port other than `8080` by passing an argument to your script (for example, `python web-mote.py 4343` would start it on port `4343`). You can run it in the background using GNU Screen. Assuming you have it installed, you start a background server with `screen -d -m -S web-mote python web-mote.py`, attach to it using `screen -r web-mote` and detach with `Ctrl+a Ctrl+d`.
 
 Like I said, it's meant to be used through my iPod touch, so the stylesheet is specifically crafted to fit the width of the screen and be readable at that size. If you're using another device, you may need to play with the .css file.
 
