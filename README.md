@@ -8,11 +8,20 @@ The latest re-write of the system was done for the purposes of exploring some UI
 
 #### Usage
 
-1. install Python 2.7 (if you're on Debian, you already have it)
-2. run `python web-mote.py` (if you want it running in the background, use `screen`)
+1. install the dependencies
+2. run `python web-mote.py`
 3. navigate to `http://[machine ip]:8080` to use the remote menu
 
-Like I said, it's meant to be used through my iPod touch, so the stylesheet is specifically crafted to fit the width of the screen and be readable at that size. If you're using another device, you may need to play with the .css file. There are also a few outstanding issues that I want to deal with before I can endorse the use of this system by anyone other than me.
+You can select a port other than `8080` by passing an argument to your script (for example, `python web-mote.py 4343` would start it on port `4343`). You can run it in the background using GNU Screen. Assuming you have it installed, you start a background server with `screen -d -m -S web-mote python web-mote.py`, attach to it using `screen -r web-mote` and detach with `Ctrl+D`.
+
+Like I said, it's meant to be used through my iPod touch, so the stylesheet is specifically crafted to fit the width of the screen and be readable at that size. If you're using another device, you may need to play with the .css file.
+
+#### Dependencies
+
+- [Python 2.7]((if you want it running in the background, use `screen`)) *if you're on Debian, you probably already have this.*
+- [mplayer](http://www.mplayerhq.hu/design7/news.html)
+- OPTIONALLY [omxplayer](https://github.com/huceke/omxplayer) *if you're on [Raspbian](http://www.raspbian.org/), you already have this. If you're not, you probably don't need it.*
+- OPTIONALLY [GNU Screen](http://www.gnu.org/software/screen/) *you'll need this or similar to run web-mote in the background*
 
 #### Licensing/Components
 *(Why is this always the longest section?)*
