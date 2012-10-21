@@ -24,7 +24,7 @@ Like I said, it's meant to be used through my iPod touch, so the stylesheet is s
 - OPTIONALLY [GNU Screen](http://www.gnu.org/software/screen/) *you'll need this or similar to run web-mote in the background*
 - Python [web.py](http://webpy.org/) module
 
-If you're on Debian, you can install everything you need by running the following as root:
+If you're on Debian or Raspbian, you can install everything you need by running the following as `root`:
 
     apt-get install mplayer screen python-setuptools
     easy_install web.py
