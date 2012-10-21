@@ -124,15 +124,16 @@ if ($.browser.safari) {
 
 $(document).ready(function() {
     mote.renderControls(
-	[[{cmd: "step-backward"}, 
-	  {cmd: "backward", held: true}, 
-	  {cmd: "forward", held: true}, 
-	  {cmd: "step-forward"}],
+	[[//{cmd: "step-backward"}, 
+	    {cmd: "backward", held: true}, 
+	    {cmd: "stop"}, 
+	    {cmd: "pause"},
+	    {cmd: "forward", held: true}, 
+	  // {cmd: "step-forward"}
+	],
 	 [{cmd: "volume-down", held: true}, 
 	  {cmd: "volume-off"}, 
-	  {cmd: "volume-up", held: true}],
-	 [{cmd: "stop"}, 
-	  {cmd: "pause"}]]);
+	  {cmd: "volume-up", held: true}]]);
     mote.render(util.postJSON("/show-directory"));
 
     new Routes();

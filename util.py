@@ -29,9 +29,9 @@ def isInRoot(entry):
     return False
 
 def nameToTitle(filename):
-    return re.sub(" [ ]+", " - ", re.sub("-", " ", os.path.basename(filename).title()))
+    return re.sub(" [ _-]+", " - ", re.sub("[-_]", " ", os.path.basename(filename).title()))
 
-def entryToJSON(entry):
+def entryToDict(entry):
     name, ext = os.path.splitext(entry)
     if ext == '':
         ext = "directory"
@@ -42,7 +42,7 @@ def entryToJSON(entry):
 def entriesToDicts(entries):
     dirs, files = [[],[]]
     for f in entries:
-        res = entryToJSON(f)
+        res = entryToDict(f)
         if os.path.isdir(res['path']):
             dirs.append(res)
         else:
