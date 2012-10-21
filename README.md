@@ -18,10 +18,16 @@ Like I said, it's meant to be used through my iPod touch, so the stylesheet is s
 
 #### Dependencies
 
-- [Python 2.7](if you want it running in the background, use `screen`) *if you're on Debian, you probably already have this.*
+- [Python 2.7](http://python.org/download/releases/2.7/)
 - [mplayer](http://www.mplayerhq.hu/design7/news.html)
 - OPTIONALLY [omxplayer](https://github.com/huceke/omxplayer) *if you're on [Raspbian](http://www.raspbian.org/), you already have this. If you're not, you probably don't need it.*
 - OPTIONALLY [GNU Screen](http://www.gnu.org/software/screen/) *you'll need this or similar to run web-mote in the background*
+- Python [web.py](http://webpy.org/) module
+
+If you're on Debian, you can install everything you need by running the following as root:
+
+    apt-get install mplayer screen python-setuptools
+    easy_install web.py
 
 #### Licensing/Components
 *(Why is this always the longest section?)*
