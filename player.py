@@ -1,5 +1,5 @@
 from multiprocessing import Queue, Process
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, call
 import web, os
 import util
 
@@ -12,7 +12,9 @@ except:
 
 try:
     call(["omxplayer"])
-    playerTable = { 'mp4': ["omxplayer"], 'ogv': ["omxplayer"] }
+    playerTable = { 
+        'mp4': ["omxplayer", "-o", "hdmi"], 
+        'ogv': ["omxplayer", "-o", "hdmi"] }
 except:
     ## If omxplayer is unavailable, use the default player for everything
     playerTable = {}
