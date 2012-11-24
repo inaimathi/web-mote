@@ -57,12 +57,11 @@ def playFile(playerCmd, fileName, cmdTable):
     while player.poll() == None:
         try:
             res = commandQueue.get(timeout=1)
+            player.stdin.write(cmdTable[res])
             if unicode(res) == unicode("stop"):
                 player.terminate()
                 activePlayer = False
                 return False
-            else:
-                player.stdin.write(cmdTable[res])
         except:
             None
     activePlayer = False
