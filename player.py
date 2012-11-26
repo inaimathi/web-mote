@@ -1,7 +1,7 @@
 from multiprocessing import Queue, Process
 from subprocess import Popen, PIPE, call
 import web, os
-import util
+import util, conf
 
 try:
     activePlayer ## Global flag keeping track of whether there's an active player
@@ -9,6 +9,8 @@ try:
 except:
     activePlayer = False
     commandQueue = Queue()
+
+defaultPlayer = ["mplayer"]
 
 try:
     call(["omxplayer"])
@@ -20,9 +22,9 @@ except:
     playerTable = {}
 
 def getPlayerCommand(filename):
-    global playerTable
+    global playerTable, defaultPlayer
     name, ext = os.path.splitext(filename)
-    return playerTable.get(ext[1:], ["mplayer"])
+    return playerTable.get(ext[1:], defaultPlayer)
 
 commandTable = {
     'mplayer':
