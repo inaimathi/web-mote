@@ -1,10 +1,11 @@
-import web, os, json, random
+import web, os, json, random, time
 import util, conf, player 
 
 urls = (
     '/show-directory', 'showDirectory',
     '/play', 'play',
     '/command', 'command',
+    '/test', 'serverTime',
     '.*', 'index'
 )
 
@@ -32,6 +33,14 @@ class play:
             random.shuffle(fileList)
         player.play(fileList)
         return util.entriesToJSON(fileList)
+
+class serverTime: 
+    def GET(self): 
+        web.header("Content-Type", "text/event-stream") # "application/x-dom-event-stream"
+        web.header("cache-control", "no-cache")
+        while True: 
+            yield "event: server-time\ndata: %s\n\n" % time.time() 
+            time.sleep(4) 
 
 class command:
     def POST(self):

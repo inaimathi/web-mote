@@ -1,6 +1,6 @@
 from multiprocessing import Queue, Process
 from subprocess import Popen, PIPE, call
-import web, os
+import os
 import util, conf
 
 try:
@@ -53,15 +53,13 @@ def play(fileList):
 
 def playFile(playerCmd, fileName, cmdTable):
     global activePlayer, commandQueue
-    web.debug(fileName)
-    player = Popen(playerCmd + [fileName], stdin=PIPE)
-    activePlayer = True
-    while player.poll() == None:
+    activePlayer = Popen(playerCmd + [fileName], stdin=PIPE)
+    while activePlayer.poll() == None:
         try:
             res = commandQueue.get(timeout=1)
-            player.stdin.write(cmdTable[res])
+            activePlayer.stdin.write(cmdTable[res])
             if unicode(res) == unicode("stop"):
-                player.terminate()
+                activePlayer.terminate()
                 activePlayer = False
                 return False
         except:

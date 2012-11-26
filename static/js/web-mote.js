@@ -122,6 +122,20 @@ if ($.browser.safari) {
     $("#controls").css({ "position": 'fixed' });    
 }
 
+var sseSource = new EventSource('/test');
+
+sseSource.onopen = function () {
+    console.log("OPENED!");
+};
+
+sseSource.onerror = function (e) {
+    console.log(["ERRORED!", e]);
+};
+
+sseSource.addEventListener('connections', function (e) { console.log(["connections", e])}, false);
+sseSource.addEventListener('server-time', function (e) { console.log(["server-time", e])}, false);
+sseSource.onmessage = function (e) { console.log(["unlabeled", e])};
+
 $(document).ready(function() {
     mote.renderControls(
 	[[//{cmd: "step-backward"}, 
