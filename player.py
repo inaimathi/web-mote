@@ -3,28 +3,27 @@ from subprocess import Popen, PIPE, call
 import os
 import util, conf
 
+############################################################
+### MASSIVE AMOUNTS OF CONFIG (this should probably be in a DB somewhere)
+############################################################
 try:
-    activePlayer ## Global flag keeping track of whether there's an active player
     commandQueue ## Global multi-process queue to accept player commands
+    playQ        ## Global multi-process queue to accept files to play
 except:
-    activePlayer = False
     commandQueue = Queue()
+    playQ = Queue()
 
 defaultPlayer = ["mplayer"]
 
+### If `omxplayer` is available, use it for `mp4`s and `ogv`s (with audio output to the HDMI port)
+### If not, use the default player for everything
 try:
     call(["omxplayer"])
     playerTable = { 
         'mp4': ["omxplayer", "-o", "hdmi"], 
         'ogv': ["omxplayer", "-o", "hdmi"] }
 except:
-    ## If omxplayer is unavailable, use the default player for everything
     playerTable = {}
-
-def getPlayerCommand(filename):
-    global playerTable, defaultPlayer
-    name, ext = os.path.splitext(filename)
-    return playerTable.get(ext[1:], defaultPlayer)
 
 commandTable = {
     'mplayer':
@@ -38,31 +37,44 @@ commandTable = {
          'volume-down': "+", 'volume-up': "-", 
          'stop': "q", 'pause': " ", 'play': " "}
     }
+### END THE MASSIVE CONFIG
+############################################################
 
-def play(fileList):
-    global commandQueue, activePlayer, commandTable
-    if activePlayer:
-        commandQueue.put("stop")
-    for aFile in fileList:
+def listen():
+    while True:
+        aFile = playQ.get()
         if util.isInRoot(aFile):
-            playerCmd = getPlayerCommand(aFile)
+            playerCmd = __getPlayerCommand(aFile)
             cmdTable = commandTable[playerCmd[0]]
-            if not playFile(playerCmd, aFile, cmdTable):
-                return "Done"
-    return "Done"
+            playFile(playerCmd, aFile, cmdTable)
 
 def playFile(playerCmd, fileName, cmdTable):
-    global activePlayer, commandQueue
+    __clearQueue(commandQueue)
     activePlayer = Popen(playerCmd + [fileName], stdin=PIPE)
     while activePlayer.poll() == None:
         try:
             res = commandQueue.get(timeout=1)
             activePlayer.stdin.write(cmdTable[res])
             if unicode(res) == unicode("stop"):
+                __clearQueue(playQ)
                 activePlayer.terminate()
-                activePlayer = False
                 return False
         except:
             None
     activePlayer = False
     return True
+
+### Local Utility
+def __getPlayerCommand(filename):
+    global playerTable, defaultPlayer
+    name, ext = os.path.splitext(filename)
+    return playerTable.get(ext[1:], defaultPlayer)
+
+def __clearQueue(q):
+    while not q.empty():
+        q.get()
+    return True
+
+### Start the player process
+proc = Process(target=listen, args=())
+proc.start()
