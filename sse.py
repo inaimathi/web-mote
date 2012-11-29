@@ -1,5 +1,5 @@
 """
-This component is taken from https://github.com/marinho/tornado
+This component is modified from https://github.com/marinho/tornado
 Released under the Apache License http://www.apache.org/licenses/LICENSE-2.0.html
 """
 
@@ -37,6 +37,7 @@ class SSEHandler(tornado.web.RequestHandler):
         # Adding the current client instance to the live handlers pool
         self.connection_id = self.generate_id()
         SSEHandler._live_connections.append(self)
+        self.id_counter = 0
 
         # Calling the open event
         self.on_open()
@@ -65,14 +66,14 @@ class SSEHandler(tornado.web.RequestHandler):
         self.stream.close()
 
     @classmethod
-    def write_message_to_all(cls, event_id, data):
+    def write_message_to_all(cls, data, id=False, event=False):
         """Sends a message to all live connections"""
-        for conn in cls._live_connections:
-            conn.write_message(event_id, data)
+        [conn.write_message(data, id=id, event=event) for conn in cls._live_connections]
 
     @tornado.web.asynchronous
-    def write_message(self, event_id, data):
-        message = tornado.escape.utf8(('id: %s\n'%event_id if event_id else '') + 'data: %s\n\n'%data)
+    def write_message(self, data, id=False, event=False):
+        message = tornado.escape.utf8(('id: %s\n'% (id if id else self.id_counter)) + ('event: %s\n'%event if event else '') + 'data: %s\n\n'%data)
+        self.id_counter += 1
         self.write(message)
         self.flush()
 

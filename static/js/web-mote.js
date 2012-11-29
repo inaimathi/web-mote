@@ -122,28 +122,26 @@ if ($.browser.safari) {
     $("#controls").css({ "position": 'fixed' });    
 }
 
-var sseSource = new EventSource('/test');
+var sseSource = new EventSource('/status');
 
-sseSource.onopen = function () {
-    console.log("OPENED!");
-};
+sseSource.onopen = function () { console.log("OPENED!"); };
+sseSource.onerror = function (e) { console.log(["ERRORED!", e]); };
 
-sseSource.onerror = function (e) {
-    console.log(["ERRORED!", e]);
-};
+sseSource.addEventListener('connection_id', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
+sseSource.addEventListener('playing', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
+sseSource.addEventListener('finished', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
+sseSource.addEventListener('command', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
 
-sseSource.addEventListener('connections', function (e) { console.log(["connections", e])}, false);
-sseSource.addEventListener('server-time', function (e) { console.log(["server-time", e])}, false);
-sseSource.onmessage = function (e) { console.log(["unlabeled", e])};
+sseSource.onmessage = function (e) { console.log(["SSE", "UNLABELED", e.type, e.data, e])};
 
 $(document).ready(function() {
     mote.renderControls(
-	[[//{cmd: "step-backward"}, 
-	    {cmd: "backward", held: true}, 
-	    {cmd: "stop"}, 
+	[[//{cmd: "step-backward"},
+	    {cmd: "backward", held: true},
+	    {cmd: "stop"},
 	    {cmd: "pause"},
-	    {cmd: "forward", held: true}, 
-	  // {cmd: "step-forward"}
+	    {cmd: "forward", held: true}
+	  //{cmd: "step-forward"}
 	],
 	 [{cmd: "volume-down", held: true}, 
 	  {cmd: "volume-off"}, 

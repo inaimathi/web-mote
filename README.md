@@ -9,10 +9,10 @@ The latest re-write of the system was done for the purposes of exploring some UI
 #### Usage
 
 1. install the dependencies
-2. run `python web-mote.py`
+2. run `python main.py`
 3. navigate to `http://[machine ip]:8080` to use the remote menu
 
-You can select a port other than `8080` by passing an argument to your script (for example, `python web-mote.py 4343` would start it on port `4343`). You can run it in the background using GNU Screen. Assuming you have it installed, you start a background server with `screen -d -m -S web-mote python web-mote.py`, attach to it using `screen -r web-mote` and detach with `Ctrl+a Ctrl+d`.
+You can run it in the background using GNU Screen. Assuming you have it installed, you start a background server with `screen -dmS web-mote python main.py`, attach to it using `screen -r web-mote` and detach with `Ctrl+a Ctrl+d`.
 
 Like I said, it's meant to be used through my iPod touch, so the stylesheet is specifically crafted to fit the width of the screen and be readable at that size. If you're using another device, you may need to play with the .css file.
 
@@ -22,12 +22,12 @@ Like I said, it's meant to be used through my iPod touch, so the stylesheet is s
 - [mplayer](http://www.mplayerhq.hu/design7/news.html)
 - OPTIONALLY [omxplayer](https://github.com/huceke/omxplayer) *if you're on [Raspbian](http://www.raspbian.org/), you already have this. If you're not, you probably don't need it.*
 - OPTIONALLY [GNU Screen](http://www.gnu.org/software/screen/) *you'll need this or similar to run web-mote in the background*
-- Python [web.py](http://webpy.org/) module
+- Python [tornado](http://www.tornadoweb.org/) module
 
 If you're on Debian or Raspbian, you can install everything you need by running the following as `root`:
 
     apt-get install mplayer screen python-setuptools
-    easy_install web.py
+    easy_install tornado
 
 #### Licensing/Components
 *(Why is this always the longest section?)*
