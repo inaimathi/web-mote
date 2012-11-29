@@ -46,7 +46,7 @@ def listen():
         aFile = playQ.get()
         if util.isInRoot(aFile):
             ServerStatus.write_message_to_all(aFile, event='playing')
-            playerCmd = __getPlayerTable(aFile)
+            playerCmd = __getPlayerCommand(aFile)
             cmdTable = commandTable[playerCmd[0]]
             playFile(playerCmd, aFile, cmdTable)
 
@@ -61,6 +61,7 @@ def playFile(playerCmd, fileName, cmdTable):
             if unicode(res) == unicode("stop"):
                 __clearQueue(playQ)
                 activePlayer.terminate()
+                ServerStatus.write_message_to_all(fileName, event="finished")
                 return False
         except:
             None
@@ -69,7 +70,7 @@ def playFile(playerCmd, fileName, cmdTable):
     return True
 
 ### Local Utility
-def __getPlayerTable(filename):
+def __getPlayerCommand(filename):
     global playerTable, defaultPlayer
     name, ext = os.path.splitext(filename)
     return playerTable.get(ext[1:], defaultPlayer)
