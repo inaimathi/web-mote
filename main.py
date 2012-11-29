@@ -1,7 +1,5 @@
-import tornado.ioloop, tornado.web, os, json, random, time, threading, logging
+import tornado.ioloop, tornado.web, os, json, random, time, threading
 import util, conf, sse, player
-
-logging.basicConfig(level=logging.DEBUG) ## filename='mote.log'
 
 class ShowDirectory(tornado.web.RequestHandler):
     def post(self):
@@ -34,20 +32,6 @@ class ServerStatus(sse.SSEHandler):
         self.write_message(self.connection_id, event='connection_id')
     def on_close(self):
         self.write_message_to_all(self.connection_id, event='left')
-
-def sendNext():
-    while True:
-        logging.debug("Pulling message...")
-        try:
-            event, msg = player.outQ.get(2)
-            logging.debug(["Showing message...", event, msg])
-            ServerStatus.write_message_to_all(msg, event=event)
-        except:
-            None
-            logging.debug(["No message found"])
-
-statusThread = threading.Thread(target=sendNext, args=())
-statusThread.start()
 
 class Command(tornado.web.RequestHandler):
     def post(self):

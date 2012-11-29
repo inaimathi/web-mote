@@ -1,7 +1,9 @@
-from multiprocessing import Queue, Process
 from subprocess import Popen, PIPE, call
+from threading import Thread
+from Queue import Queue
 import os
 import util, conf
+from main import ServerStatus
 
 ############################################################
 ### MASSIVE AMOUNTS OF CONFIG (this should probably be in a DB somewhere)
@@ -35,17 +37,15 @@ commandTable = {
 try:
     commandQueue ## Global multi-process queue to accept player commands
     playQ        ## Global multi-process queue to accept files to play
-    outQ ## Message queue to communicate with external processes from the player thread
 except:
     commandQueue = Queue()
     playQ = Queue()
-    outQ = Queue()
 
 def listen():
     while True:
         aFile = playQ.get()
         if util.isInRoot(aFile):
-            outQ.put(['playing', aFile])
+            ServerStatus.write_message_to_all(aFile, event='playing')
             playerCmd = __getPlayerTable(aFile)
             cmdTable = commandTable[playerCmd[0]]
             playFile(playerCmd, aFile, cmdTable)
@@ -57,14 +57,14 @@ def playFile(playerCmd, fileName, cmdTable):
         try:
             res = commandQueue.get(timeout=1)
             activePlayer.stdin.write(cmdTable[res])
-            outQ.put(["command", res])
+            ServerStatus.write_message_to_all(res, event="command")
             if unicode(res) == unicode("stop"):
                 __clearQueue(playQ)
                 activePlayer.terminate()
                 return False
         except:
             None
-    outQ.put(("finished", fileName))
+    ServerStatus.write_message_to_all(fileName, event="finished")
     activePlayer = False
     return True
 
@@ -80,5 +80,5 @@ def __clearQueue(q):
     return True
 
 ### Start the player process
-proc = Process(target=listen, args=())
-proc.start()
+playerThread = Thread(target=listen, args=())
+playerThread.start()
