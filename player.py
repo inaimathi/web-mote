@@ -61,12 +61,10 @@ def playFile(playerCmd, fileName, cmdTable):
             if unicode(res) == unicode("stop"):
                 __clearQueue(playQ)
                 activePlayer.terminate()
-                ServerStatus.write_message_to_all(fileName, event="finished")
                 return False
         except:
             None
     ServerStatus.write_message_to_all(fileName, event="finished")
-    activePlayer = False
     return True
 
 ### Local Utility

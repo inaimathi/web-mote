@@ -1,4 +1,4 @@
-import tornado.ioloop, tornado.web, os, json, random, time, threading
+import tornado.ioloop, tornado.web, os, json, random, time
 import util, conf, sse, player
 
 class ShowDirectory(tornado.web.RequestHandler):
@@ -22,8 +22,9 @@ class Play(tornado.web.RequestHandler):
             fileList = json.loads(t)
         if self.get_argument('shuffle', False):
             random.shuffle(fileList)
-        self.write(json.dumps(fileList))
-        time.sleep(1)
+        time.sleep(.5)
+        ServerStatus.write_message_to_all(json.dumps(fileList), event="new-queue")
+        self.write("Ok")
         [player.playQ.put(f) for f in fileList]
 
 class ServerStatus(sse.SSEHandler): 
