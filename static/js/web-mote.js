@@ -53,13 +53,7 @@ var mote = {
 	       })
 	    },
     play: function (target) {
-	console.log(["cmd", "play", target]);
-	$.post("/play",
-	       {"target" : target},
-	       function (data, textStatus, jq) {
-		   console.log("SUCCESS!")
-		   console.log(["now playing", target, textStatus, $.parseJSON(jq.responseText)]);
-	       });
+	$.post("/play", {"target" : target}, function (data, textStatus, jq) { console.log(jq.responseText); });
     },
     shuffle: function (target) {
 	console.log(["cmd", "shuffle", target]);
@@ -92,14 +86,12 @@ var mote = {
 Handlebars.registerHelper("control-button", function (ctrl) {
     return new Handlebars.SafeString(templates.control(ctrl));
 });
-
 var templates = {
     folder : Handlebars.compile($("#tmp-folder").html()),
     file : Handlebars.compile($("#tmp-file").html()),
     control: Handlebars.compile($("#tmp-control").html()),
     controlBlock : Handlebars.compile($("#tmp-control-block").html())
 }
-
 var Routes = Backbone.Router.extend({ 
     routes: {
 	"navigate*path": "nav"
@@ -122,17 +114,17 @@ if ($.browser.safari) {
     $("#controls").css({ "position": 'fixed' });    
 }
 
-var sseSource = new EventSource('/status');
+// var sseSource = new EventSource('/status');
 
-sseSource.onopen = function () { console.log("OPENED!"); };
-sseSource.onerror = function (e) { console.log(["ERRORED!", e]); };
+// sseSource.onopen = function () { console.log("OPENED!"); };
+// sseSource.onerror = function (e) { console.log(["ERRORED!", e]); };
 
-sseSource.addEventListener('connection_id', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
-sseSource.addEventListener('playing', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
-sseSource.addEventListener('finished', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
-sseSource.addEventListener('command', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
+// sseSource.addEventListener('connection_id', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
+// sseSource.addEventListener('playing', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
+// sseSource.addEventListener('finished', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
+// sseSource.addEventListener('command', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
 
-sseSource.onmessage = function (e) { console.log(["SSE", "UNLABELED", e.type, e.data, e])};
+// sseSource.onmessage = function (e) { console.log(["SSE", "UNLABELED", e.type, e.data, e])};
 
 $(document).ready(function() {
     mote.renderControls(
