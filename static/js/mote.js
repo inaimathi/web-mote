@@ -1,15 +1,13 @@
 var util = {
     post: function ($http, url, data) {
-	var encoded = [];
-	if (data) {
-	    for (k in data) encoded.push(encodeURI(k) + "=" + encodeURI(data[k]));
-	};
+	var encoded = _.map(data, function (val, k) { return encodeURI(k) + "=" + encodeURI(val); });
 	$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
 	return $http.post(url, encoded.join("&"));
     },
     browser: function () { 
 	/// Adapted from jQuery.browser()
-	/// Yes, I know it's frowned upon, fuck you. I need quick&dirty version detection for a SPECIFIC type of old-ass Safari.
+	/// Yes, I know it's frowned upon, fuck you. 
+	/// I need quick&dirty version detection for a SPECIFIC type of old-ass Safari.
 	/// This is sufficient if inelegant.
 	var ua = navigator.userAgent.toLowerCase();
 	var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
@@ -42,10 +40,10 @@ function FileListCtrl ($scope, $http, $location) {
 
 function CommandCtrl ($scope, $http) {
 // older versions of safari don't like `position: fixed`.
-// they also don't like when you set `position: fixed` in a stylesheet,
-//   then override that with inline styles.
+// they also don't like when you set `position: fixed` in a stylesheet then override with inline styles.
 // what I'm saying is that older versions of safari are assholes
     if (util.browser().agent == 'safari') {
+	$scope.style = { position: "absolute", top : window.pageYOffset + 'px' };
 	window.onscroll = function() { 
 	    $scope.style = { position: "absolute", top : window.pageYOffset + 'px' };
 	};

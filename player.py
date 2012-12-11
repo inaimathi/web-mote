@@ -80,4 +80,5 @@ def __clearQueue(q):
 
 ### Start the player process
 playerThread = Thread(target=listen, args=())
+playerThread.daemon = True
 playerThread.start()

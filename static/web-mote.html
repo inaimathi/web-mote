@@ -8,7 +8,6 @@
   <body>
 
     <div ng-app>
-
       <ul id="file-list" ng-controller="FileListCtrl" ng-init="navigate()">
 	<li class="{{file.type}}" ng-repeat="file in filesList" ng-switch="file.type">
 	  <span ng-switch-when="directory">
@@ -46,6 +45,7 @@
     <!-- ------- -->
     <!-- Scripts -->
     <!-- ------- -->
+    <script type="text/javascript" src="js/underscore-min.js"></script>
     <script type="text/javascript" src="js/angular.min.js"></script>
 
     <script type="text/javascript" src="js/mote.js"></script>
