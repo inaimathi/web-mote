@@ -34,6 +34,8 @@ If you're on Debian or Raspbian, you can install everything you need by running 
 
 This program is released under the GNU AGPL (check the `LICENSE` file for details).
 
+The favicon is a remote control icon designed by [FatCow - Udderly Fantastic Hosting](http://www.fatcow.com/) and released under [CC-BY 3.0](http://creativecommons.org/licenses/by/3.0/us/)
+
 The front-end uses [Twitter Bootstrap](https://github.com/twitter/bootstrap) for styling and icons, which is released under the [Apache License](https://github.com/twitter/bootstrap/blob/master/LICENSE)
 
 A previous version used artwork from the [famfamfam SILK Icon set](http://www.famfamfam.com/lab/icons/silk/), which are released under [CC-BY 2.5](http://creativecommons.org/licenses/by/2.5/)
@@ -42,8 +44,6 @@ A previous version used artwork from [lucamennoia's media player icons piece](ht
 
 The folder/video/audio/image icons are from the [Crystal Clear set](http://commons.wikimedia.org/wiki/Crystal_Clear) (released under [LGPL](http://www.gnu.org/licenses/lgpl.html)).
 
-A copy of [jQuery](http://jquery.com/) and [jQueryUI](http://jqueryui.com/) are included for ease of use. Both are [dual-licensed under GPL and MIT-style licenses](http://jquery.org/license/).
+A copy of [jQuery](http://jquery.com/) is included for ease of use. It's [dual-licensed under GPL and MIT-style expat licenses](http://jquery.org/license/).
 
-The system uses [backbone.js](http://backbonejs.org/) (and therefore also [underscore.js](http://underscorejs.org/)) for the purposes of internal routing. Both are released under the [MIT-style Expat license](https://github.com/documentcloud/backbone/blob/master/LICENSE)
-
-[handlebars.js](http://handlebarsjs.com/) is used for HTML templating. It is released under an [MIT-style Expat license](https://github.com/wycats/handlebars.js/blob/master/LICENSE).
+A copy of the fantastic [Angular.js](http://angularjs.org/) is included for ease of use. It's released under an [MIT-style expat license](https://github.com/angular/angular.js/blob/master/LICENSE)

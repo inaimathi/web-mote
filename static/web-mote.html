@@ -8,17 +8,19 @@
   <body>
 
     <div ng-app>
-      <ul id="file-list" ng-controller="FileListCtrl">
-	<li class="{{file.type}}" ng-repeat="file in filesList" ng-switch="file.buttons">
-	  <span ng-switch-when="true">
+
+      <ul id="file-list" ng-controller="FileListCtrl" ng-init="navigate()">
+	<li class="{{file.type}}" ng-repeat="file in filesList" ng-switch="file.type">
+	  <span ng-switch-when="directory">
 	    <button class="play btn" ng-click="play(file.path)"><i class="icon-play"></i></button>
 	    <button class="shuffle btn" ng-click="shuffle(file.path)"><i class="icon-random"></i></button>
-	    <a class="dir-link" ng-click="play(file.path)">{{file.name}}</a>
+	    <a class="dir-link" ng-click="navigate(file.path)">{{file.name}}</a>
 	  </span>
 	  <a class="dir-link buttonless" ng-switch-default ng-click="play(file.path)">{{file.name}}</a>
 	</li>
       </ul>
-      <div id="controls" ng-controller="CommandCtrl">
+
+      <div id="controls" ng-controller="CommandCtrl" ng-style="style">
 	<ul ng-repeat="controlsList in controlTree">
 	  <li ng-repeat="control in controlsList" class="{{control.cmd}}" ng-switch="control.held">
 	    <button class="btn" ng-switch-when="true" 
@@ -45,9 +47,7 @@
     <!-- Scripts -->
     <!-- ------- -->
     <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="js/underscore-min.js"></script>
     <script type="text/javascript" src="js/angular.min.js"></script>
-    <script type="text/javascript" src="js/angular-resource.min.js"></script>
 
     <script type="text/javascript" src="js/mote.js"></script>
 

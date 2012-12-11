@@ -1,39 +1,69 @@
 var util = {
-    requestJSON : function (url, dat, type) {
-	var res = null;
-	$.ajax({
-	    url: url,
-	    data: dat,
-	    type: type,
-	    success: function (data, ret, jq) { 
-		// some browsers error if you try to use the data value here, 
-		// so we use jq.responseText. It provides the same contents, 
-		// but doesn't error
-		res = $.parseJSON(jq.responseText); 
-	    },
-	    async: false
-	});
-	return res;
+    post: function ($http, url, data) {
+	var encoded = [];
+	if (data) {
+	    for (k in data) encoded.push(encodeURI(k) + "=" + encodeURI(data[k]));
+	};
+	$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+	return $http.post(url, encoded.join("&"));
     },
-    getJSON : function (url, dat) { 
-	return util.requestJSON(url, dat, "GET"); 
-    },
-    postJSON : function (url, dat) { return util.requestJSON(url, dat, "POST"); }
+    browser: function () { 
+	/// Adapted from jQuery.browser()
+	/// Yes, I know it's frowned upon, fuck you. I need quick&dirty version detection for a SPECIFIC type of old-ass Safari.
+	/// This is sufficient if inelegant.
+	var ua = navigator.userAgent.toLowerCase();
+	var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+	    /(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+	    /(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+	    /(msie) ([\w.]+)/.exec( ua ) ||
+	    ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+	    [];
+	return {agent: match[1] || "", version: match[2] || "0"}
+    }
 };
 
-function FileListCtrl ($scope) {
-    $scope.filesList = util.postJSON("/show-directory");
+// var Routes = Backbone.Router.extend({ 
+//     routes: {
+// 	"navigate*path": "nav"
+//     },
+//     nav: mote.navigate
+// });
+
+function FileListCtrl ($scope, $http, $location) {
+    $scope.navigate = function (path) {
+	var dat = {dir: path} || false;
+	util.post($http, "/show-directory", dat)
+	    .success(function (data, status, headers, config){
+		$scope.filesList = data;
+	    });
+    }
 
     $scope.play = function (path) { 
-	console.log(["PLAYING FILE", path]) 
+	util.post($http, "/play", {target: path})
     }
 
     $scope.shuffle = function (path) { 
-	console.log(["SHUFFLING DIRECTORY", path])
+	util.post($http, "/play", {target: path, shuffle: true})
     }
 };
 
-function CommandCtrl ($scope) {
+function CommandCtrl ($scope, $http) {
+// older versions of safari don't like `position: fixed`.
+// they also don't like when you set `position: fixed` in a stylesheet,
+//   then override that with inline styles.
+// what I'm saying is that older versions of safari are assholes
+    if (util.browser().agent == 'safari') {
+	window.onscroll = function() { 
+	    $scope.style = { position: "absolute", top : window.pageYOffset + 'px' };
+	};
+    } else {
+	$scope.style = { position: "fixed" };
+    }
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+    $scope.held = false;
+
     $scope.controlTree = [
 	[ //{cmd: "step-backward"},
     	    {cmd: "backward", held: true},
@@ -48,29 +78,32 @@ function CommandCtrl ($scope) {
     ]
 
     $scope.command = function (cmd) { 
-	console.log(["Sent command", cmd]) 
+	util.post($http, "/command", {"command": cmd})
+	    .success(function (data, status, headers, config) {
+		$scope.data = data;
+		if (cmd == "pause") $scope.controlTree[0][2] = {cmd: "play"}
+		else if (cmd == "play") $scope.controlTree[0][2] = {cmd: "pause"}
+	    })
     }
 
     $scope.hold = function (cmd) {
-	console.log(["Holding command", cmd]) 
+	$scope.held = setInterval(function() { $scope.command(cmd) }, 200);
     }
 
     $scope.release = function (cmd) { 
-	console.log(["Released command"]) 
+	clearInterval($scope.held);
+	$scope.held = false;
     }
 }
 
-// older versions of safari don't like `position: fixed`.
-// they also don't like when you set `position: fixed` in a stylesheet,
-//   then override that with inline styles.
-// what I'm saying is that older versions of safari are assholes
-if ($.browser.safari) {
-    $("#controls").css({ "position": 'absolute' });
-    window.onscroll = function() {
-	$("#controls").css({ 
-	    "top" : window.pageYOffset + 'px'
-	});
-    };
-} else {
-    $("#controls").css({ "position": 'fixed' });    
-}
+// var sseSource = new EventSource('/status');
+
+// sseSource.onopen = function () { console.log("OPENED!"); };
+// sseSource.onerror = function (e) { console.log(["ERRORED!", e]); };
+
+// sseSource.addEventListener('connection_id', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
+// sseSource.addEventListener('playing', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
+// sseSource.addEventListener('finished', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
+// sseSource.addEventListener('command', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
+
+// sseSource.onmessage = function (e) { console.log(["SSE", "UNLABELED", e.type, e.data, e])};
