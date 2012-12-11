@@ -22,20 +22,13 @@ var util = {
     }
 };
 
-// var Routes = Backbone.Router.extend({ 
-//     routes: {
-// 	"navigate*path": "nav"
-//     },
-//     nav: mote.navigate
-// });
-
-function FileListCtrl ($scope, $http, $location) {
+function FileListCtrl ($scope, $http, $location) { 
     $scope.navigate = function (path) {
-	var dat = {dir: path} || false;
-	util.post($http, "/show-directory", dat)
+	util.post($http, "/show-directory", { dir: path || $location.path() })
 	    .success(function (data, status, headers, config){
 		$scope.filesList = data;
 	    });
+	$location.path(path || $location.path())
     }
 
     $scope.play = function (path) { 
