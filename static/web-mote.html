@@ -15,15 +15,15 @@
 	    <button class="shuffle btn" ng-click="shuffle(file.path)"><i class="icon-random"></i></button>
 	    <a class="dir-link" ng-click="navigate(file.path)">{{file.name}}</a>
 	  </span>
-	  <a class="dir-link buttonless" ng-switch-default ng-click="play(file.path)">{{file.name}}</a>
+	  <a class="dir-link buttonless" ng-switch-when="return" ng-click="navigate(file.path)">{{file.name}}</a>
+	  <a class="file-link" ng-switch-default ng-click="play(file.path)">{{file.name}}</a>
 	</li>
       </ul>
 
       <div id="controls" ng-controller="CommandCtrl" ng-style="style">
 	<ul ng-repeat="controlsList in controlTree">
 	  <li ng-repeat="control in controlsList" class="{{control.cmd}}" ng-switch="control.held">
-	    <button class="btn" ng-switch-when="true" 
-		    ng-mousedown="command(control.cmd); hold(control.cmd)"
+	    <button class="btn" ng-switch-when="true" ng-mousedown="command(control.cmd); hold(control.cmd)"
 		    ng-mouseup="release()" ng-mouseleave="release()">
 	      <i class="icon-{{control.cmd}}"></i>
 	    </button>

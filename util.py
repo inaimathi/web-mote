@@ -57,9 +57,9 @@ def dirToJSON(directory):
         map(lambda p: os.path.join(directory, p), 
             sorted(os.listdir(directory))))
     if directory in conf.root:
-        entries.insert(0, {'path': "root", 'name': "..", 'type': "directory"})
+        entries.insert(0, {'path': "root", 'name': "..", 'type': "return"})
     else:
-        entries.insert(0, {'path': os.path.dirname(directory), 'name': "..", 'type': "directory"})
+        entries.insert(0, {'path': os.path.dirname(directory), 'name': "..", 'type': "return"})
     return json.dumps(entries)
 
 def deepListDir(directory):
