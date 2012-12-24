@@ -56,13 +56,12 @@ function CommandCtrl ($scope, $http) {
     $scope.held = false;
 
     $scope.controlTree = [
-	[ //{cmd: "step-backward"},
-    	    {cmd: "backward", held: true},
-    	    {cmd: "stop"},
-    	    {cmd: "pause"},
-    	    {cmd: "forward", held: true}
-    	    //{cmd: "step-forward"}
-	],
+	[ {cmd: "step-backward"},
+    	  {cmd: "backward", held: true},
+    	  {cmd: "stop"},
+    	  {cmd: "pause"},
+    	  {cmd: "forward", held: true},
+    	  {cmd: "step-forward"} ],
     	[{cmd: "volume-down", held: true}, 
     	 {cmd: "volume-off"}, 
     	 {cmd: "volume-up", held: true}]
@@ -87,14 +86,29 @@ function CommandCtrl ($scope, $http) {
     }
 }
 
-// var sseSource = new EventSource('/status');
+function FeedCtrl ($scope) {
+    $scope.feed = [{type: "Blah", msg: "Test"}];
+    $scope.maxLen = 5;
 
-// sseSource.onopen = function () { console.log("OPENED!"); };
-// sseSource.onerror = function (e) { console.log(["ERRORED!", e]); };
+    $scope.feedListener = function (type, label) {
+	$scope.source.addEventListener(type, function (e) {
+	    $scope.$apply($scope.feed.push({type: e.type, msg: label + e.data}));
+	    if ($scope.feed.length > $scope.maxLen) 
+		$scope.$apply($scope.feed = _.drop($scope.feed, $scope.feed.length - $scope.maxLen));
+	}, false);
+    }
 
-// sseSource.addEventListener('connection_id', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
-// sseSource.addEventListener('playing', function (e) { console.log(["SSE", e.type, e.data, e]) }, false);
-// sseSource.addEventListener('finished', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
-// sseSource.addEventListener('command', function (e) { console.log(["SSE", e.type, e.data, e])}, false);
+    $scope.source = new EventSource('/status');
 
-// sseSource.onmessage = function (e) { console.log(["SSE", "UNLABELED", e.type, e.data, e])};
+    $scope.source.onopen = function () { console.log("OPENED!"); };
+    $scope.source.onerror = function (e) { console.log(["ERRORED!", e]); };
+
+    $scope.feedListener('playing', "Now playing -- ");
+    $scope.feedListener('finished', "Just played -- ");
+    $scope.feedListener('stopped', "Stopped -- ");
+    $scope.feedListener('command', "Got command -- ")
+
+    $scope.source.onmessage = function (e) { 
+    	console.log(["SSE", "UNLABELED", e.type, e.data, e])
+    };
+}

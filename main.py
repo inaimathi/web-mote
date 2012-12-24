@@ -41,7 +41,7 @@ class Command(tornado.web.RequestHandler):
 
 class Index(tornado.web.RequestHandler):
     def get(self):
-        self.redirect("/static/web-mote.html", permanent=True)
+        self.redirect("/static/index.html", permanent=True)
 
 urls = [(r"/", Index),
         (r"/show-directory", ShowDirectory),

@@ -59,6 +59,7 @@ def playFile(playerCmd, fileName, cmdTable):
             activePlayer.stdin.write(cmdTable[res])
             ServerStatus.write_message_to_all(res, event="command")
             if unicode(res) == unicode("stop"):
+                ServerStatus.write_message_to_all(fileName, event="stopped")
                 __clearQueue(playQ)
                 activePlayer.terminate()
                 return False

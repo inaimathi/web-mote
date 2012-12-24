@@ -20,6 +20,10 @@
 	</li>
       </ul>
 
+      <ul ng-controller="FeedCtrl">
+	<li ng-repeat="msg in feed">{{msg.msg}}</li>
+      </ul>
+
       <div id="controls" ng-controller="CommandCtrl" ng-style="style">
 	<ul ng-repeat="controlsList in controlTree">
 	  <li ng-repeat="control in controlsList" class="{{control.cmd}}" ng-switch="control.held">
