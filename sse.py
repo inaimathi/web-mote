@@ -10,6 +10,7 @@ import hashlib
 class SSEHandler(tornado.web.RequestHandler):
     _closing_timeout = False
     _live_connections = [] # Yes, this list is declared here because it is used by the class methods
+    _history = []
 
     def __init__(self, application, request, **kwargs):
         super(SSEHandler, self).__init__(application, request, **kwargs)

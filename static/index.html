@@ -20,8 +20,11 @@
 	</li>
       </ul>
 
-      <ul ng-controller="FeedCtrl">
-	<li ng-repeat="msg in feed">{{msg.msg}}</li>
+      <ul id="feed" ng-controller="FeedCtrl">
+	<li ng-repeat="msg in feed" class="msg-{{msg.type}}">
+	  <span class="feed-label {{msg.extension.toLowerCase()}}">{{msg.label}}</span>
+	  <span class="filename">{{msg.filename}}</span>
+	</li>
       </ul>
 
       <div id="controls" ng-controller="CommandCtrl" ng-style="style">

@@ -15,3 +15,9 @@
 #file-list li.directory a { background-image: url(watermark/folder.png); }
 #file-list li.mp4 a, #file-list li.mov a, #file-list li.ogv a { background-image: url(watermark/video.png); }
 #file-list li.mp3 a, #file-list li.ogg a { background-image: url(watermark/audio.png); }
+
+/** The Action Feed *********************************************/
+#feed { list-style-type: none; width: 350px; margin: 3px auto; padding-top: 5px; clear: both; }
+#feed li { font-size: xx-small; border: 1px solid #ddd; border-radius: 5px; padding: 0px 15px; margin: 3px; width: 298px; background-color: #eee; }
+#feed li .feed-label { font-family: courier; color: #aaa; }
+#feed li .filename { font-weight: bolder; }

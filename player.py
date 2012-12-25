@@ -45,7 +45,7 @@ def listen():
     while True:
         aFile = playQ.get()
         if util.isInRoot(aFile):
-            ServerStatus.write_message_to_all(aFile, event='playing')
+            ServerStatus.send(util.nameToTitle(aFile), event='playing')
             playerCmd = __getPlayerCommand(aFile)
             cmdTable = commandTable[playerCmd[0]]
             playFile(playerCmd, aFile, cmdTable)
@@ -57,15 +57,14 @@ def playFile(playerCmd, fileName, cmdTable):
         try:
             res = commandQueue.get(timeout=1)
             activePlayer.stdin.write(cmdTable[res])
-            ServerStatus.write_message_to_all(res, event="command")
             if unicode(res) == unicode("stop"):
-                ServerStatus.write_message_to_all(fileName, event="stopped")
+                ServerStatus.send(util.nameToTitle(fileName), event="stopped")
                 __clearQueue(playQ)
                 activePlayer.terminate()
                 return False
         except:
             None
-    ServerStatus.write_message_to_all(fileName, event="finished")
+    ServerStatus.send(util.nameToTitle(fileName), event="finished")
     return True
 
 ### Local Utility

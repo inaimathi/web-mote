@@ -87,12 +87,13 @@ function CommandCtrl ($scope, $http) {
 }
 
 function FeedCtrl ($scope) {
-    $scope.feed = [{type: "Blah", msg: "Test"}];
+    $scope.feed = [];
     $scope.maxLen = 5;
 
     $scope.feedListener = function (type, label) {
 	$scope.source.addEventListener(type, function (e) {
-	    $scope.$apply($scope.feed.push({type: e.type, msg: label + e.data}));
+	    var match = /(.*?)\.(.*)/.exec(e.data)
+	    $scope.$apply($scope.feed.push({type: e.type, label: label, filename: match[1], extension: match[2]}));
 	    if ($scope.feed.length > $scope.maxLen) 
 		$scope.$apply($scope.feed = _.drop($scope.feed, $scope.feed.length - $scope.maxLen));
 	}, false);
@@ -103,10 +104,9 @@ function FeedCtrl ($scope) {
     $scope.source.onopen = function () { console.log("OPENED!"); };
     $scope.source.onerror = function (e) { console.log(["ERRORED!", e]); };
 
-    $scope.feedListener('playing', "Now playing -- ");
-    $scope.feedListener('finished', "Just played -- ");
-    $scope.feedListener('stopped', "Stopped -- ");
-    $scope.feedListener('command', "Got command -- ")
+    $scope.feedListener('playing',  "Now playing -- ");
+    $scope.feedListener('finished', "Finished ----- ");
+    $scope.feedListener('stopped',  "Stopped ------ ");
 
     $scope.source.onmessage = function (e) { 
     	console.log(["SSE", "UNLABELED", e.type, e.data, e])
