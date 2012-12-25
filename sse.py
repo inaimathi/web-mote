@@ -94,7 +94,7 @@ class FeedHandler(SSEHandler):
         msg = [message, id, event]
         FeedHandler._history.append(msg)
         self.write_message_to_all(json.dumps(FeedHandler.info()), event="playlist")
-321        
+
     @classmethod
     def info(self):
         try:

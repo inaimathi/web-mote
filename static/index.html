@@ -21,12 +21,12 @@
       </ul>
       
       <div ng-controller="FeedCtrl">
-	<ul id="playlist" ng-show=playlist.nowPlaying>
+	<ul id="playlist" ng-show="playlist.nowPlaying">
 	  <li class="now-playing {{playlist.nowPlaying.extension}}">{{playlist.nowPlaying.name}}</li>
 	  <li ng-repeat="f in playlist.upNext" class="{{f.extension}}">
 	    {{f.name}}
 	  </li>
-	  <li>... and {{playlist.more}} more</li>
+	  <li ng-show="playlist.more>0">... and {{playlist.more}} more</li>
 	</ul>
       </div>
 
