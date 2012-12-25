@@ -25,21 +25,11 @@ class Play(tornado.web.RequestHandler):
         time.sleep(.5)
         ServerStatus.write_message_to_all(json.dumps(fileList), event="new-queue")
         self.write("Ok")
+        ServerStatus.newList([util.nameToTitle(f) for f in fileList])
         [player.playQ.put(f) for f in fileList]
 
-class ServerStatus(sse.SSEHandler): 
+class ServerStatus(sse.FeedHandler): 
     _msg_timeout = None
-    @classmethod
-    def send(self, message, id=False, event=False):
-        msg = [message, id, event]
-        sse.SSEHandler._history.append(msg)
-        self.write_message_to_all(*msg)
-    def on_open(self):
-        self.write_message(self.connection_id, event='connection_id')
-        for msg in sse.SSEHandler._history[-5:len(sse.SSEHandler._history)]:
-            self.write_message(*msg)
-    def on_close(self):
-        self.write_message_to_all(self.connection_id, event='left')
 
 class Command(tornado.web.RequestHandler):
     def post(self):

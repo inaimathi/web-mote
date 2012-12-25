@@ -5,12 +5,11 @@ Released under the Apache License http://www.apache.org/licenses/LICENSE-2.0.htm
 
 import time
 import tornado.web, tornado.escape, tornado.ioloop
-import hashlib
+import hashlib, json, logging
 
 class SSEHandler(tornado.web.RequestHandler):
     _closing_timeout = False
     _live_connections = [] # Yes, this list is declared here because it is used by the class methods
-    _history = []
 
     def __init__(self, application, request, **kwargs):
         super(SSEHandler, self).__init__(application, request, **kwargs)
@@ -81,3 +80,40 @@ class SSEHandler(tornado.web.RequestHandler):
     def remove_connection(self):
         if self in SSEHandler._live_connections:
             SSEHandler._live_connections.remove(self)
+
+class FeedHandler(SSEHandler):
+    _history = []
+    _playlist = []
+
+    @classmethod
+    def send(self, message, id=False, event=False):
+        logging.warning(event)
+        if event == "stopped":
+            FeedHandler._playlist = []
+        elif event == "finished":
+            FeedHandler.next()
+        msg = [message, id, event]
+        FeedHandler._history.append(msg)
+        self.write_message_to_all(json.dumps(FeedHandler.info()), event="playlist")
+        
+    @classmethod
+    def info(self):
+        try:
+            return {'nowPlaying': FeedHandler._playlist[0], 
+                    'upNext': FeedHandler._playlist[1:6], 
+                    'more': len(FeedHandler._playlist[6:])}
+        except:
+            return {'nowPlaying': False, 'upNext': [], 'more': 0}
+
+    @classmethod
+    def newList(self, newPlayList):
+        FeedHandler._playlist = newPlayList
+        self.write_message_to_all(json.dumps(FeedHandler.info()), event="playlist")
+        
+    @classmethod
+    def next(self):
+        FeedHandler._playlist = FeedHandler._playlist[1:]
+
+    def on_open(self):
+        self.write_message(self.connection_id, event='connection_id')
+        self.write_message(json.dumps(FeedHandler.info()), event="playlist")

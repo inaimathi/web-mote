@@ -19,13 +19,16 @@
 	  <a class="file-link" ng-switch-default ng-click="play(file.path)">{{file.name}}</a>
 	</li>
       </ul>
-
-      <ul id="feed" ng-controller="FeedCtrl">
-	<li ng-repeat="msg in feed" class="msg-{{msg.type}}">
-	  <span class="feed-label {{msg.extension.toLowerCase()}}">{{msg.label}}</span>
-	  <span class="filename">{{msg.filename}}</span>
-	</li>
-      </ul>
+      
+      <div ng-controller="FeedCtrl">
+	<ul id="playlist" ng-show=playlist.nowPlaying>
+	  <li class="now-playing {{playlist.nowPlaying.extension}}">{{playlist.nowPlaying.name}}</li>
+	  <li ng-repeat="f in playlist.upNext" class="{{f.extension}}">
+	    {{f.name}}
+	  </li>
+	  <li>... and {{playlist.more}} more</li>
+	</ul>
+      </div>
 
       <div id="controls" ng-controller="CommandCtrl" ng-style="style">
 	<ul ng-repeat="controlsList in controlTree">

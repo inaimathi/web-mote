@@ -56,12 +56,13 @@ function CommandCtrl ($scope, $http) {
     $scope.held = false;
 
     $scope.controlTree = [
-	[ {cmd: "step-backward"},
+	[ // {cmd: "step-backward"},
     	  {cmd: "backward", held: true},
     	  {cmd: "stop"},
     	  {cmd: "pause"},
     	  {cmd: "forward", held: true},
-    	  {cmd: "step-forward"} ],
+    	  // {cmd: "step-forward"}
+	],
     	[{cmd: "volume-down", held: true}, 
     	 {cmd: "volume-off"}, 
     	 {cmd: "volume-up", held: true}]
@@ -86,17 +87,12 @@ function CommandCtrl ($scope, $http) {
     }
 }
 
-function FeedCtrl ($scope) {
-    $scope.feed = [];
-    $scope.maxLen = 5;
+function FeedCtrl ($scope, $parse) {
+    $scope.playlist = [];
 
-    $scope.feedListener = function (type, label) {
-	$scope.source.addEventListener(type, function (e) {
-	    var match = /(.*?)\.(.*)/.exec(e.data)
-	    $scope.$apply($scope.feed.push({type: e.type, label: label, filename: match[1], extension: match[2]}));
-	    if ($scope.feed.length > $scope.maxLen) 
-		$scope.$apply($scope.feed = _.drop($scope.feed, $scope.feed.length - $scope.maxLen));
-	}, false);
+    $scope.fileToDict = function (filename) {
+	var split = filename.split(".")
+	return {name: split[0], extension: split[1].toLocaleLowerCase()}
     }
 
     $scope.source = new EventSource('/status');
@@ -104,9 +100,12 @@ function FeedCtrl ($scope) {
     $scope.source.onopen = function () { console.log("OPENED!"); };
     $scope.source.onerror = function (e) { console.log(["ERRORED!", e]); };
 
-    $scope.feedListener('playing',  "Now playing -- ");
-    $scope.feedListener('finished', "Finished ----- ");
-    $scope.feedListener('stopped',  "Stopped ------ ");
+    $scope.source.addEventListener('playlist', function (e) {
+	var res = $parse(e.data)();
+	res.nowPlaying = $scope.fileToDict(res.nowPlaying);
+	res.upNext = _.map(res.upNext, $scope.fileToDict)
+	$scope.$apply($scope.playlist = res);
+    });
 
     $scope.source.onmessage = function (e) { 
     	console.log(["SSE", "UNLABELED", e.type, e.data, e])
