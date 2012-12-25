@@ -102,8 +102,10 @@ function FeedCtrl ($scope, $parse) {
 
     $scope.source.addEventListener('playlist', function (e) {
 	var res = $parse(e.data)();
-	res.nowPlaying = $scope.fileToDict(res.nowPlaying);
-	res.upNext = _.map(res.upNext, $scope.fileToDict)
+	if (res.nowPlaying) {
+	    res.nowPlaying = $scope.fileToDict(res.nowPlaying);
+	    res.upNext = _.map(res.upNext, $scope.fileToDict)
+	} 
 	$scope.$apply($scope.playlist = res);
     });
 

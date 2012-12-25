@@ -5,7 +5,7 @@ Released under the Apache License http://www.apache.org/licenses/LICENSE-2.0.htm
 
 import time
 import tornado.web, tornado.escape, tornado.ioloop
-import hashlib, json, logging
+import hashlib, json
 
 class SSEHandler(tornado.web.RequestHandler):
     _closing_timeout = False
@@ -87,7 +87,6 @@ class FeedHandler(SSEHandler):
 
     @classmethod
     def send(self, message, id=False, event=False):
-        logging.warning(event)
         if event == "stopped":
             FeedHandler._playlist = []
         elif event == "finished":
@@ -95,7 +94,7 @@ class FeedHandler(SSEHandler):
         msg = [message, id, event]
         FeedHandler._history.append(msg)
         self.write_message_to_all(json.dumps(FeedHandler.info()), event="playlist")
-        
+321        
     @classmethod
     def info(self):
         try:
