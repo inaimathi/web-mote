@@ -1,9 +1,4 @@
 var util = {
-    post: function ($http, url, data) {
-	var encoded = _.map(data, function (val, k) { return encodeURI(k) + "=" + encodeURI(val); });
-	$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
-	return $http.post(url, encoded.join("&"));
-    },
     browser: function () { 
 	/// Adapted from jQuery.browser()
 	/// Yes, I know it's frowned upon, fuck you. 
@@ -22,7 +17,7 @@ var util = {
 
 function FileListCtrl ($scope, $http, $location) { 
     $scope.navigate = function (path) {
-	util.post($http, "/show-directory", { dir: path || $location.path() })
+	$http.post("/show-directory", {}, {params: { dir: path || $location.path() }})
 	    .success(function (data, status, headers, config){
 		$scope.filesList = data;
 	    });
@@ -30,11 +25,11 @@ function FileListCtrl ($scope, $http, $location) {
     }
 
     $scope.play = function (path) { 
-	util.post($http, "/play", {target: path})
+	$http.post("/play", {}, {params: {target: path}})
     }
 
     $scope.shuffle = function (path) { 
-	util.post($http, "/play", {target: path, shuffle: true})
+	$http.post("/play", {}, {params: {target: path, shuffle: true}})
     }
 };
 
@@ -69,7 +64,7 @@ function CommandCtrl ($scope, $http) {
     ]
 
     $scope.command = function (cmd) { 
-	util.post($http, "/command", {"command": cmd})
+	$http.post("/command", {}, {params: {command: cmd}})
 	    .success(function (data, status, headers, config) {
 		$scope.data = data;
 		if (cmd == "pause") $scope.controlTree[0][2] = {cmd: "play"}
