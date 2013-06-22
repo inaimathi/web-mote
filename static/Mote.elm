@@ -21,13 +21,8 @@ cmd = send $ lift reqCmd command.events
 ply = send $ lift reqPlay playing.events
 
 ----- Utility
-fromJust maybe = case maybe of
-  Just val -> val
-  _ -> error "No value"
-
-jstrToRec jStr = case fromString jStr of
-  Just val -> Just . toRecord $ toJSObject val
-  _ -> Nothing
+jstrToRec jStr = let conv = toRecord . toJSObject
+                 in maybe [] conv $ fromString jStr
 
 ----- Application
 box n = container 350 n midTop
@@ -43,7 +38,7 @@ entry { name, path, entryType } = let btn = if | entryType == "return" -> files.
                                            in width 350 $ btn name
 
 showEntries res = case res of
-  Success str -> flow down . map entry . fromJust $ jstrToRec str
+  Success str -> flow down . map entry $ jstrToRec str
   _ -> plainText "Waiting..."
 
 showMe entries = flow down [ box 100 $ controls
