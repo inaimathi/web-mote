@@ -46,5 +46,7 @@ showEntries res = case res of
   Success str -> flow down . map entry . fromJust $ jstrToRec str
   _ -> plainText "Waiting..."
 
-main = flow down [ box 100 $ controls
-                 , showEntries $ id <~ dir ]
+showMe entries = flow down [ box 100 $ controls
+                           , showEntries entries ] 
+
+main = showMe <~ dir
