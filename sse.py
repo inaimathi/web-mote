@@ -5,7 +5,7 @@ Released under the Apache License http://www.apache.org/licenses/LICENSE-2.0.htm
 
 import time
 import tornado.web, tornado.escape, tornado.ioloop
-import hashlib, json
+import hashlib, json, random
 
 class SSEHandler(tornado.web.RequestHandler):
     _closing_timeout = False
@@ -16,26 +16,22 @@ class SSEHandler(tornado.web.RequestHandler):
         self.stream = request.connection.stream
         self._closed = False
 
-    def initialize(self):
+    def set_default_headers(self):
         self.set_header('Content-Type','text/event-stream; charset=utf-8')
         self.set_header('Cache-Control','no-cache')
         self.set_header('Connection','keep-alive')
 
     def generate_id(self):
-        return hashlib.md5('%s-%s-%s'%(
-            self.request.connection.address[0],
-            self.request.connection.address[1],
-            time.time(),
-            )).hexdigest()
+        return '%016x' % random.randint(0,2**64)
+
+    def prepare(self):
+        self.connection_id = self.generate_id()
 
     @tornado.web.asynchronous
     def get(self):
-        # Sending the standard headers
-        headers = self._generate_headers()
-        self.write(headers); self.flush()
+        self.flush()
 
         # Adding the current client instance to the live handlers pool
-        self.connection_id = self.generate_id()
         SSEHandler._live_connections.append(self)
         self.id_counter = 0
 
