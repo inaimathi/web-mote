@@ -8,13 +8,33 @@
 #file-list { list-style-type: none; width: 350px; margin: auto; margin-top: 120px; }
 #file-list li { margin-bottom: 10px; padding: 3px; clear: both; }
 #file-list li button { margin-top: 0px; float: left; margin-right: 5px; }
-#file-list li a { min-height: 20px; padding: 4px; float: left; border: 1px solid #ddd; border-radius: 5px; background: right no-repeat; background-size: 50px; font-weight: bolder; }
+#file-list li a {
+    min-height: 20px;
+    padding: 4px;
+    float: left;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: right no-repeat;
+    background-size: 25px;
+    font-weight: bolder;
+}
 #file-list li a.dir-link { white-space: nowrap; width: 220px; }
 #file-list li a.file-link, #file-list li a.dir-link.buttonless { word-break: break-all; width: 320px; }
 
-#file-list li.directory a { background-image: url(watermark/folder.png); }
-#file-list li.mp4 a, #file-list li.mov a, #file-list li.ogv a { background-image: url(watermark/video.png); }
-#file-list li.mp3 a, #file-list li.ogg a { background-image: url(watermark/audio.png); }
+
+#file-list li.directory a {
+    background-image: url(watermark/folder.png);
+}
+
+#file-list li.mp4 a, #file-list li.m4v a,
+#file-list li.ogv a, #file-list li.mkv a,
+#file-list li.mov a, #file-list li.avi a {
+    background-image: url(watermark/video.png);
+}
+
+#file-list li.mp3 a, #file-list li.ogg a {
+    background-image: url(watermark/audio.png);
+}
 
 /** The Action Feed *********************************************/
 #playlist { list-style-type: none; width: 350px; margin: 3px auto; padding-top: 5px; clear: both; text-align: center; }
