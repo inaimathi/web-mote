@@ -28,8 +28,10 @@ def isInRoot(entry):
             return True
     return False
 
+resub = re.compile("[-_ ]+")
 def nameToTitle(filename):
-    return re.sub(" [ _-]+", " - ", re.sub("[-_]", " ", os.path.basename(filename).title()))
+    name = os.path.basename(filename)
+    return resub.sub(" ", name)
 
 def entryToDict(entry):
     if os.path.isdir(entry):
