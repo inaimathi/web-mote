@@ -28,14 +28,17 @@ def isInRoot(entry):
             return True
     return False
 
+resub = re.compile("[-_ ]+")
 def nameToTitle(filename):
-    return re.sub(" [ _-]+", " - ", re.sub("[-_]", " ", os.path.basename(filename).title()))
+    name = os.path.basename(filename)
+    return resub.sub(" ", name)
 
 def entryToDict(entry):
-    name, ext = os.path.splitext(entry)
-    if ext == '':
+    if os.path.isdir(entry):
+        name = entry
         ext = "directory"
     else:
+        name, ext = os.path.splitext(entry)
         ext = ext[1:]
     return {'path': entry, 'type': ext, 'name': nameToTitle(name), 'buttons': True}
 
